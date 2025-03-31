@@ -1,0 +1,5 @@
+wise-api-client==0.0.1
+langchain==0.3.21
+langchain-openai==0.2.2
+openai==1.66.0
+pydantic>=2.10
