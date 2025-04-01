@@ -34,7 +34,7 @@ class Actions(TypedDict, total=False):
 
 # Define Context type
 class Context(TypedDict, total=False):
-    account: Optional[str]
+    profile_id: Optional[str]
 
 
 # Define Configuration type

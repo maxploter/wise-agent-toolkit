@@ -1,11 +1,11 @@
 from typing import Dict, List
 
 from .prompts import (
-    CREATE_TRANSFER_PROMPT,
+    CREATE_TRANSFER_PROMPT, CREATE_QUOTE_PROMPT,
 )
 
 from .schema import (
-    CreateTransfer,
+    CreateTransfer, CreateQuote,
 )
 
 tools: List[Dict] = [
@@ -16,6 +16,17 @@ tools: List[Dict] = [
         "args_schema": CreateTransfer,
         "actions": {
             "transfers": {
+                "create": True,
+            }
+        },
+    },
+    {
+        "method": "create_quote",
+        "name": "Create Quote",
+        "description": CREATE_QUOTE_PROMPT,
+        "args_schema": CreateQuote,
+        "actions": {
+            "quotes": {
                 "create": True,
             }
         },

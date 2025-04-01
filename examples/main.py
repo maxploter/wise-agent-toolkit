@@ -11,14 +11,18 @@ from wise_agent_toolkit.langchain.toolkit import WiseAgentToolkit
 load_dotenv()
 
 llm = ChatOpenAI(
-    model="gpt-4o",
+    model="gpt-4o-mini",
 )
 
 wise_agent_toolkit = WiseAgentToolkit(
     api_key=os.getenv("WISE_API_KEY"),
+    host=os.getenv("WISE_API_HOST"),
     configuration={
+        "context": {
+            "profile_id": os.getenv("WISE_PROFILE_ID"),
+        },
         "actions": {
-            "recipients": {
+            "quotes": {
                 "create": True,
             },
         }
@@ -32,7 +36,7 @@ langgraph_agent_executor = create_react_agent(llm, tools)
 
 input_state = {
     "messages": """
-        Check if i have a recipient with name ABC?
+        Create quote 10 EUR to GPB? What is the Google Pay fee?
     """,
 }
 

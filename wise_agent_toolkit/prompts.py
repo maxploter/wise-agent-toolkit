@@ -14,3 +14,20 @@ It takes the following arguments:
 Returns:
     The created transfer object from Wise.
 """
+
+CREATE_QUOTE_PROMPT = """
+This tool will create a quote for currency conversion in Wise.
+
+It takes the following arguments:
+- source_currency (str): The source currency code (3-letter ISO currency code).
+- target_currency (str): The target currency code (3-letter ISO currency code).
+- source_amount (float, optional): The amount in the source currency to be converted.
+- target_amount (float, optional): The amount in the target currency to receive.
+  Note: Provide either source_amount or target_amount, not both.
+- profile_id (str, optional): The profile ID. If not provided, will be taken from context.
+- pay_out (str, optional): The pay out method.
+- preferred_pay_in (str, optional): The preferred pay in method.
+
+Returns:
+    The created quote object from Wise.
+"""
