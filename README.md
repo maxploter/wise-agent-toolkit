@@ -1,4 +1,4 @@
-# Wise Agent Toolkit
+# Wise (TransferWise) Agent Toolkit
 
 The Wise Agent Toolkit enables the integration of LangChain with Wise APIs to create and manage transfers programmatically. This library simplifies working with the Wise API and empowers developers to embed financial operations into AI-driven workflows using Python.
 
@@ -24,6 +24,7 @@ from wise_agent_toolkit.langchain.toolkit import WiseAgentToolkit
 
 wise_agent_toolkit = WiseAgentToolkit(
     api_key="YOUR_WISE_API_KEY",
+    host="https://api.transferwise.com",
     configuration={
         "actions": {
             "transfers": {
@@ -66,14 +67,12 @@ wise_agent_toolkit = WiseAgentToolkit(
     api_key="YOUR_WISE_API_KEY",
     configuration={
         "context": {
-            "currency": "EUR"
+            "profile_id": 42,
         }
     },
 )
 ```
 
 ## Supported API Methods
-- Create a transfer
-- List all transfers
-- Retrieve transfer details
-- Cancel a transfer
+- Create a quote
+- Create a transfer (WIP)
