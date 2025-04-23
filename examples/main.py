@@ -25,6 +25,9 @@ wise_agent_toolkit = WiseAgentToolkit(
             "quotes": {
                 "create": True,
             },
+            "recipients": {
+                "read": True,
+            },
         }
     },
 )
@@ -36,7 +39,9 @@ langgraph_agent_executor = create_react_agent(llm, tools)
 
 input_state = {
     "messages": """
-        Create quote 10 EUR to GPB? What is the Google Pay fee?
+    You are a Wise agent. You can create quotes, and list recipient accounts.
+    Please find John Doe PHP recipient and create a quote for 10 EUR to PHP to this recipient.
+    Please list down ALL the quote's information including IDs.
     """,
 }
 

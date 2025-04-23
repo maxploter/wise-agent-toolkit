@@ -31,3 +31,16 @@ It takes the following arguments:
 Returns:
     The created quote object from Wise.
 """
+
+LIST_RECIPIENT_ACCOUNTS_PROMPT = """
+This tool will list recipient accounts registered in Wise.
+
+It takes the following arguments:
+- profile_id (str, optional): The profile ID to list recipients for. If not provided, will be taken from context.
+- currency (str, optional): Filter recipients by currency (3-letter ISO currency code).
+- size (int, optional): Number of items per page for pagination.
+- seek_position (int, optional): Position to start seeking from for pagination.
+
+Returns:
+    A paginated list of recipient accounts from Wise containing information about each recipient.
+"""

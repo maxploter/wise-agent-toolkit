@@ -1,7 +1,7 @@
 import unittest
 from unittest import mock
 
-from wise_agent_toolkit.functions import create_transfer, create_quote
+from wise_agent_toolkit.functions import create_transfer, create_quote, list_recipient_accounts
 
 
 class TestWiseFunctions(unittest.TestCase):
@@ -72,6 +72,71 @@ class TestWiseFunctions(unittest.TestCase):
             self.assertEqual(target_currency, call_args[0][1].target_currency)
             self.assertEqual(source_amount, call_args[0][1].source_amount)
             self.assertIsNone(call_args[0][1].target_amount)
+
+            self.assertEqual(result, mock_response)
+
+    def test_list_recipient_accounts(self):
+        mock_api_client = mock.Mock()
+        mock_recipients_api = mock.Mock()
+        mock_response = {
+            "items": [
+                {"id": "111", "accountHolderName": "Test Recipient", "currency": "USD"},
+                {"id": "222", "accountHolderName": "Another Recipient", "currency": "EUR"}
+            ],
+            "itemsPerPage": 2,
+            "totalItems": 2,
+            "totalPages": 1
+        }
+
+        with mock.patch("wise_api_client.RecipientsApi") as mock_recipients_api_class:
+            mock_recipients_api_class.return_value = mock_recipients_api
+            mock_recipients_api.list_recipient_accounts.return_value = mock_response
+
+            # Test with explicit profile_id
+            context = {}
+            profile_id = "456"
+            currency = "USD"
+            size = 10
+            seek_position = 0
+
+            result = list_recipient_accounts(
+                api_client=mock_api_client,
+                context=context,
+                profile_id=profile_id,
+                currency=currency,
+                size=size,
+                seek_position=seek_position
+            )
+
+            mock_recipients_api_class.assert_called_once_with(mock_api_client)
+            mock_recipients_api.list_recipient_accounts.assert_called_once_with(
+                profile_id=int(profile_id),
+                currency=currency,
+                size=size,
+                seek_position=seek_position
+            )
+
+            self.assertEqual(result, mock_response)
+
+            # Reset mocks for next test
+            mock_recipients_api_class.reset_mock()
+            mock_recipients_api.list_recipient_accounts.reset_mock()
+
+            # Test with profile_id from context
+            context = {"profile_id": "789"}
+
+            result = list_recipient_accounts(
+                api_client=mock_api_client,
+                context=context,
+                currency=currency
+            )
+
+            mock_recipients_api.list_recipient_accounts.assert_called_once_with(
+                profile_id=int(context["profile_id"]),
+                currency=currency,
+                size=None,
+                seek_position=None
+            )
 
             self.assertEqual(result, mock_response)
 

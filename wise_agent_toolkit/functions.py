@@ -129,3 +129,42 @@ def create_quote(
 
     # Make the API call
     return quotes_api.create_authenticated_quote(int(profile_id), create_authenticated_quote_request)
+
+
+def list_recipient_accounts(
+    api_client,
+    context: Context,
+    profile_id: Optional[str] = None,
+    currency: Optional[str] = None,
+    size: Optional[int] = None,
+    seek_position: Optional[int] = None,
+):
+    """
+    List recipient accounts.
+
+    Parameters:
+        api_client: The Wise API client.
+        context (Context): The context.
+        profile_id (str, optional): The profile ID. If not provided, will be taken from context.
+        currency (str, optional): Filter by currency.
+        size (int, optional): Number of items per page.
+        seek_position (int, optional): Position to start seeking from.
+
+    Returns:
+        PaginatedRecipients: A paginated list of recipient accounts.
+    """
+    recipients_api = wise_api_client.RecipientsApi(api_client)
+
+    # Get profile ID from context if not provided
+    if not profile_id:
+        profile_id = context.get("profile_id")
+        if not profile_id:
+            raise ValueError("Profile ID must be provided either as a parameter or in context.")
+
+    # Make the API call
+    return recipients_api.list_recipient_accounts(
+        profile_id=int(profile_id),
+        currency=currency,
+        size=size,
+        seek_position=seek_position
+    )

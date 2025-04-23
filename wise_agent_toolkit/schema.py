@@ -82,3 +82,26 @@ class CreateQuote(BaseModel):
         None,
         description="The preferred pay in method.",
     )
+
+class ListRecipientAccounts(BaseModel):
+    """Schema for the ``list_recipient_accounts`` operation."""
+
+    profile_id: Optional[str] = Field(
+        None,
+        description="The profile ID to list recipients for. If not provided, will be taken from context.",
+    )
+
+    currency: Optional[str] = Field(
+        None,
+        description="Filter recipients by currency (3-letter ISO currency code).",
+    )
+
+    size: Optional[int] = Field(
+        None,
+        description="Number of items per page for pagination.",
+    )
+
+    seek_position: Optional[int] = Field(
+        None,
+        description="Position to start seeking from for pagination.",
+    )
