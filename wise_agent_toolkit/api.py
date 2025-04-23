@@ -9,7 +9,7 @@ from wise_api_client import ApiClient
 
 from .configuration import Context
 from .functions import (
-    create_transfer, create_quote,
+    create_transfer, create_quote, list_recipient_accounts,
 )
 
 
@@ -43,9 +43,10 @@ class WiseAPI(BaseModel):
                 quote,
                 default=str # to_dict() does not serialize datetime objects
             )
+        elif method == "list_recipient_accounts":
+            recipients = list_recipient_accounts(self._api_client, self._context, *args, **kwargs).to_dict()
+            return json.dumps(recipients,default=str)  # to_dict() does not serialize datetime objects
         elif method == "create_recipient":
             raise NotImplementedError("create_recipient method is not implemented.")
-        elif method == "list_recipients":
-            raise NotImplementedError("list_recipients method is not implemented.")
         else:
             raise ValueError("Invalid method " + method)

@@ -1,11 +1,11 @@
 from typing import Dict, List
 
 from .prompts import (
-    CREATE_TRANSFER_PROMPT, CREATE_QUOTE_PROMPT,
+    CREATE_TRANSFER_PROMPT, CREATE_QUOTE_PROMPT, LIST_RECIPIENT_ACCOUNTS_PROMPT,
 )
 
 from .schema import (
-    CreateTransfer, CreateQuote,
+    CreateTransfer, CreateQuote, ListRecipientAccounts,
 )
 
 tools: List[Dict] = [
@@ -28,6 +28,17 @@ tools: List[Dict] = [
         "actions": {
             "quotes": {
                 "create": True,
+            }
+        },
+    },
+    {
+        "method": "list_recipient_accounts",
+        "name": "List Recipient Accounts",
+        "description": LIST_RECIPIENT_ACCOUNTS_PROMPT,
+        "args_schema": ListRecipientAccounts,
+        "actions": {
+            "recipients": {
+                "read": True,
             }
         },
     },
