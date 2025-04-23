@@ -64,7 +64,7 @@ def create_transfer(
 
     create_standard_transfer_request = wise_api_client.CreateStandardTransferRequest.from_dict(transfer_request_dict)
 
-    return transfer_api.v1_transfers_post(create_standard_transfer_request)
+    return transfer_api.create_transfer(create_standard_transfer_request)
 
 def create_quote(
     api_client,
@@ -128,4 +128,4 @@ def create_quote(
     create_authenticated_quote_request = wise_api_client.CreateAuthenticatedQuoteRequest.from_dict(quote_request_dict)
 
     # Make the API call
-    return quotes_api.v3_profiles_profile_id_quotes_post(int(profile_id), create_authenticated_quote_request)
+    return quotes_api.create_authenticated_quote(int(profile_id), create_authenticated_quote_request)

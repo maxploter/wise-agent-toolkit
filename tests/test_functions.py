@@ -13,7 +13,7 @@ class TestWiseFunctions(unittest.TestCase):
 
         with mock.patch("wise_api_client.TransfersApi") as mock_transfers_api_class:
             mock_transfers_api_class.return_value = mock_transfer_api
-            mock_transfer_api.v1_transfers_post.return_value = mock_response
+            mock_transfer_api.create_transfer.return_value = mock_response
 
             context = {"account": "test-account"}
             recipient_id = "12345"
@@ -30,9 +30,9 @@ class TestWiseFunctions(unittest.TestCase):
 
             mock_transfers_api_class.assert_called_once_with(mock_api_client)
 
-            mock_transfer_api.v1_transfers_post.assert_called_once()
+            mock_transfer_api.create_transfer.assert_called_once()
 
-            call_args = mock_transfer_api.v1_transfers_post.call_args[0][0]
+            call_args = mock_transfer_api.create_transfer.call_args[0][0]
 
             self.assertEqual(int(recipient_id), call_args.target_account)
             self.assertEqual(quote_id, call_args.quote_uuid)
@@ -47,7 +47,7 @@ class TestWiseFunctions(unittest.TestCase):
 
         with mock.patch("wise_api_client.QuotesApi") as mock_quotes_api_class:
             mock_quotes_api_class.return_value = mock_quotes_api
-            mock_quotes_api.v3_profiles_profile_id_quotes_post.return_value = mock_response
+            mock_quotes_api.create_authenticated_quote.return_value = mock_response
 
             # Test with source_amount
             context = {"profile_id": "456"}
@@ -64,9 +64,9 @@ class TestWiseFunctions(unittest.TestCase):
             )
 
             mock_quotes_api_class.assert_called_once_with(mock_api_client)
-            mock_quotes_api.v3_profiles_profile_id_quotes_post.assert_called_once()
+            mock_quotes_api.create_authenticated_quote.assert_called_once()
 
-            call_args = mock_quotes_api.v3_profiles_profile_id_quotes_post.call_args
+            call_args = mock_quotes_api.create_authenticated_quote.call_args
             self.assertEqual(int(context["profile_id"]), call_args[0][0])  # profile_id
             self.assertEqual(source_currency, call_args[0][1].source_currency)
             self.assertEqual(target_currency, call_args[0][1].target_currency)
