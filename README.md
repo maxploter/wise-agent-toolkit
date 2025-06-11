@@ -76,4 +76,5 @@ wise_agent_toolkit = WiseAgentToolkit(
 ## Supported API Methods
 - Create a quote
 - List recipient accounts
+- Create recipient account
 - Create a transfer (WIP)

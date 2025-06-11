@@ -1,7 +1,7 @@
 import unittest
 from unittest import mock
 
-from wise_agent_toolkit.functions import create_transfer, create_quote, list_recipient_accounts
+from wise_agent_toolkit.functions import create_transfer, create_quote, list_recipient_accounts, create_recipient_account
 
 
 class TestWiseFunctions(unittest.TestCase):
@@ -137,6 +137,64 @@ class TestWiseFunctions(unittest.TestCase):
                 size=None,
                 seek_position=None
             )
+
+            self.assertEqual(result, mock_response)
+
+    def test_create_recipient_account(self):
+        mock_api_client = mock.Mock()
+        mock_recipients_api = mock.Mock()
+        mock_response = {
+            "id": "recipient-123",
+            "account_holder_name": "John Doe",
+            "currency": "USD",
+            "country": "US",
+            "type": "email",
+            "details": {
+                "email": "john.doe@example.com",
+                "address": {
+                    "country": "US",
+                    "city": "New York",
+                    "postCode": "10001",
+                    "firstLine": "123 Main St"
+                }
+            }
+        }
+
+        with mock.patch("wise_api_client.RecipientsApi") as mock_recipients_api_class:
+            mock_recipients_api_class.return_value = mock_recipients_api
+            mock_recipients_api.create_recipient_account.return_value = mock_response
+
+            context = {"profile_id": "456"}
+            
+            # Test with new function signature using individual parameters and kwargs
+            result = create_recipient_account(
+                api_client=mock_api_client,
+                context=context,
+                account_holder_name="John Doe",
+                currency="USD",
+                type="email",
+                owned_by_customer=True,
+                details={
+                    "legalType": "PRIVATE",
+                    "email": "john.doe@example.com",
+                    "address": {
+                        "country": "US",
+                        "city": "New York",
+                        "postCode": "10001",
+                        "firstLine": "123 Main St"
+                    }
+                }
+            )
+
+            mock_recipients_api_class.assert_called_once_with(mock_api_client)
+            mock_recipients_api.create_recipient_account.assert_called_once()
+
+            call_args = mock_recipients_api.create_recipient_account.call_args[0][0]
+            self.assertEqual("John Doe", call_args.account_holder_name)
+            self.assertEqual("USD", call_args.currency)
+            self.assertEqual("email", call_args.type)
+            self.assertEqual(int(context["profile_id"]), call_args.profile)
+            self.assertEqual(True, call_args.owned_by_customer)
 
             self.assertEqual(result, mock_response)
 

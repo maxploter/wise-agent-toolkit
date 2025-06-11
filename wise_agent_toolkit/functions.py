@@ -131,6 +131,62 @@ def create_quote(
     return quotes_api.create_authenticated_quote(int(profile_id), create_authenticated_quote_request)
 
 
+def create_recipient_account(
+    api_client,
+    context: Context,
+    account_holder_name: str,
+    currency: str,
+    type: str,
+    profile_id: Optional[int] = None,
+    owned_by_customer: Optional[bool] = None,
+    **kwargs
+):
+    """
+    Create a recipient account.
+
+    Parameters:
+        api_client: The Wise API client.
+        context (Context): The context.
+        account_holder_name (str): The name of the account holder.
+        currency (str): The currency code (3-letter ISO currency code).
+        type (str): The type of recipient account.
+        profile_id (int, optional): The profile ID. If not provided, will be taken from context.
+        owned_by_customer (bool, optional): Whether this account is owned by the sending user.
+        **kwargs: Dynamic fields based on account requirements (e.g., details, address, etc.).
+
+    Returns:
+        Recipient: The created recipient account.
+    """
+    recipients_api = wise_api_client.RecipientsApi(api_client)
+
+    # Get profile ID from context if not provided
+    if profile_id is None:
+        profile_id = context.get("profile_id")
+        if not profile_id:
+            raise ValueError("Profile ID must be provided either as a parameter or in context.")
+
+    # Create the request dictionary with fixed fields
+    create_recipient_request_dict = {
+        "accountHolderName": account_holder_name,
+        "currency": currency,
+        "type": type,
+        "profile": int(profile_id)
+    }
+
+    # Add optional fixed field
+    if owned_by_customer is not None:
+        create_recipient_request_dict["ownedByCustomer"] = owned_by_customer
+
+    # Add all dynamic fields
+    create_recipient_request_dict.update(kwargs)
+
+    # Create the request object from dictionary
+    create_recipient_request = wise_api_client.CreateRecipientRequest.from_dict(create_recipient_request_dict)
+
+    # Make the API call
+    return recipients_api.create_recipient_account(create_recipient_request)
+
+
 def list_recipient_accounts(
     api_client,
     context: Context,
