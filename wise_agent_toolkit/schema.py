@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Dict, Any
 from pydantic import BaseModel, Field
 
 
@@ -105,3 +105,34 @@ class ListRecipientAccounts(BaseModel):
         None,
         description="Position to start seeking from for pagination.",
     )
+
+class CreateRecipientAccount(BaseModel):
+    """Schema for the ``create_recipient_account`` operation."""
+
+    account_holder_name: str = Field(
+        ...,
+        description="The recipient's full name.",
+    )
+
+    currency: str = Field(
+        ...,
+        description="3 character currency code for the recipient's account.",
+    )
+
+    type: str = Field(
+        ...,
+        description="The type of recipient account, determined from the account requirements.",
+    )
+
+    profile_id: Optional[int] = Field(
+        None,
+        description="The profile ID that the recipient will be created under. If not provided, will be taken from context.",
+    )
+
+    owned_by_customer: Optional[bool] = Field(
+        None,
+        description="Whether this account is owned by the sending user.",
+    )
+
+    class Config:
+        extra = "allow"  # Allow additional fields for dynamic properties

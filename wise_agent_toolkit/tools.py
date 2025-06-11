@@ -1,11 +1,11 @@
 from typing import Dict, List
 
 from .prompts import (
-    CREATE_TRANSFER_PROMPT, CREATE_QUOTE_PROMPT, LIST_RECIPIENT_ACCOUNTS_PROMPT,
+    CREATE_TRANSFER_PROMPT, CREATE_QUOTE_PROMPT, LIST_RECIPIENT_ACCOUNTS_PROMPT, CREATE_RECIPIENT_ACCOUNT_PROMPT,
 )
 
 from .schema import (
-    CreateTransfer, CreateQuote, ListRecipientAccounts,
+    CreateTransfer, CreateQuote, ListRecipientAccounts, CreateRecipientAccount,
 )
 
 tools: List[Dict] = [
@@ -39,6 +39,17 @@ tools: List[Dict] = [
         "actions": {
             "recipients": {
                 "read": True,
+            }
+        },
+    },
+    {
+        "method": "create_recipient_account",
+        "name": "Create Recipient Account",
+        "description": CREATE_RECIPIENT_ACCOUNT_PROMPT,
+        "args_schema": CreateRecipientAccount,
+        "actions": {
+            "recipients": {
+                "create": True,
             }
         },
     },

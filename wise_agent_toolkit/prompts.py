@@ -44,3 +44,21 @@ It takes the following arguments:
 Returns:
     A paginated list of recipient accounts from Wise containing information about each recipient.
 """
+
+CREATE_RECIPIENT_ACCOUNT_PROMPT = """
+This tool will create a recipient account in Wise.
+
+It takes the following arguments:
+- account_holder_name (str): The recipient's full name.
+- currency (str): 3 character currency code for the recipient's account.
+- type (str): The type of recipient account, determined from the account requirements.
+- profile_id (int, optional): The profile ID that the recipient will be created under. If not provided, will be taken from context.
+- owned_by_customer (bool, optional): Whether this account is owned by the sending user.
+- **kwargs: Dynamic fields based on account requirements. This can include:
+  - details (dict): Account-specific details like legalType, email, IBAN, sort code, account number, etc.
+  - address (dict): Address information with country, city, postCode, firstLine, etc.
+  - Any other fields required by the specific currency route as returned by /v1/quotes/{quoteId}/account-requirements.
+
+Returns:
+    The created recipient account object from Wise.
+"""
