@@ -41,28 +41,22 @@ def create_transfer(
         import uuid
         customer_transaction_id = str(uuid.uuid4())
 
-    details_dict = {
-        "reference": reference
-    }
+    # Create TransferDetails object using Python field names
+    transfer_details = wise_api_client.TransferDetails(
+        reference=reference,
+        transfer_purpose=transfer_purpose,
+        transfer_purpose_sub_transfer_purpose=transfer_purpose_sub,
+        transfer_purpose_invoice_number=transfer_purpose_invoice,
+        source_of_funds=source_of_funds
+    )
 
-    if transfer_purpose:
-        details_dict["transferPurpose"] = transfer_purpose
-    if transfer_purpose_sub:
-        details_dict["transferPurposeSubTransferPurpose"] = transfer_purpose_sub
-    if transfer_purpose_invoice:
-        details_dict["transferPurposeInvoiceNumber"] = transfer_purpose_invoice
-    if source_of_funds:
-        details_dict["sourceOfFunds"] = source_of_funds
-
-    # Create main request dictionary
-    transfer_request_dict = {
-        "targetAccount": int(recipient_id),
-        "quoteUuid": quote_id,
-        "customerTransactionId": customer_transaction_id,
-        "details": details_dict
-    }
-
-    create_standard_transfer_request = wise_api_client.CreateStandardTransferRequest.from_dict(transfer_request_dict)
+    # Create CreateStandardTransferRequest object using Python field names
+    create_standard_transfer_request = wise_api_client.CreateStandardTransferRequest(
+        target_account=int(recipient_id),
+        quote_uuid=quote_id,
+        customer_transaction_id=customer_transaction_id,
+        details=transfer_details
+    )
 
     return transfer_api.create_transfer(create_standard_transfer_request)
 
