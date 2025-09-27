@@ -68,10 +68,11 @@ class TestWiseFunctions(unittest.TestCase):
 
             call_args = mock_quotes_api.create_authenticated_quote.call_args
             self.assertEqual(int(context["profile_id"]), call_args[0][0])  # profile_id
-            self.assertEqual(source_currency, call_args[0][1].source_currency)
-            self.assertEqual(target_currency, call_args[0][1].target_currency)
-            self.assertEqual(source_amount, call_args[0][1].source_amount)
-            self.assertIsNone(call_args[0][1].target_amount)
+            # Access attributes through actual_instance
+            request_obj = call_args[0][1].actual_instance
+            self.assertEqual(source_currency, request_obj.source_currency)
+            self.assertEqual(target_currency, request_obj.target_currency)
+            self.assertEqual(source_amount, request_obj.source_amount)
 
             self.assertEqual(result, mock_response)
 

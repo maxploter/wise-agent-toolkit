@@ -1,3 +1,4 @@
+wise-api-client==0.2.2
 wise-api-client==0.1.1
 langchain==0.3.21
 langchain-openai==0.2.2
