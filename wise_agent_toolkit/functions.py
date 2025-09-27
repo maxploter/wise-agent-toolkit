@@ -96,30 +96,40 @@ def create_quote(
         if not profile_id:
             raise ValueError("Profile ID must be provided either as a parameter or in context.")
 
-    # Create quote request dictionary
-    quote_request_dict = {
-        "sourceCurrency": source_currency,
-        "targetCurrency": target_currency,
-    }
-
     # Either source_amount or target_amount should be provided, but not both
     if source_amount is not None and target_amount is not None:
         raise ValueError("Please provide either source_amount or target_amount, not both.")
-    elif source_amount is not None:
-        quote_request_dict["sourceAmount"] = source_amount
-    elif target_amount is not None:
-        quote_request_dict["targetAmount"] = target_amount
-    else:
+    elif source_amount is None and target_amount is None:
         raise ValueError("Either source_amount or target_amount must be provided.")
 
-    # Add optional parameters if provided
-    if pay_out:
-        quote_request_dict["payOut"] = pay_out
-    if preferred_pay_in:
-        quote_request_dict["preferredPayIn"] = preferred_pay_in
+    # Create payment metadata if pay_out or preferred_pay_in are provided
+    payment_metadata = None
+    if pay_out or preferred_pay_in:
+        payment_metadata = wise_api_client.CreateAuthenticatedQuoteRequestBasePaymentMetadata(
+            pay_out=pay_out,
+            preferred_pay_in=preferred_pay_in
+        )
 
-    # Create the request object
-    create_authenticated_quote_request = wise_api_client.CreateAuthenticatedQuoteRequest.from_dict(quote_request_dict)
+    # Create the appropriate request object based on which amount is provided
+    if source_amount is not None:
+        # Use CreateAuthenticatedSourceAmountQuoteRequest
+        quote_request = wise_api_client.CreateAuthenticatedSourceAmountQuoteRequest(
+            sourceCurrency=source_currency,
+            targetCurrency=target_currency,
+            sourceAmount=source_amount,
+            paymentMetadata=payment_metadata
+        )
+    else:
+        # Use CreateAuthenticatedTargetAmountQuoteRequest
+        quote_request = wise_api_client.CreateAuthenticatedTargetAmountQuoteRequest(
+            sourceCurrency=source_currency,
+            targetCurrency=target_currency,
+            targetAmount=target_amount,
+            paymentMetadata=payment_metadata
+        )
+
+    # Create the main request object
+    create_authenticated_quote_request = wise_api_client.CreateAuthenticatedQuoteRequest(quote_request)
 
     # Make the API call
     return quotes_api.create_authenticated_quote(int(profile_id), create_authenticated_quote_request)
