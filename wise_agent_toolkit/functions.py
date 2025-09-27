@@ -3,14 +3,16 @@ from typing import Optional
 import wise_api_client
 
 from .configuration import Context
+import uuid
 
 
 def create_transfer(
   api_client,
   context: Context,
-  recipient_id: str,
-  quote_id: str,
-  reference: str,
+  quote_uuid: str,
+  target_account: int,
+  source_account: Optional[int] = None,
+  reference: Optional[str] = None,
   customer_transaction_id: Optional[str] = None,
   transfer_purpose: Optional[str] = None,
   transfer_purpose_sub: Optional[str] = None,
@@ -23,10 +25,11 @@ def create_transfer(
   Parameters:
           api_client: The Wise API client.
           context (Context): The context.
-          recipient_id (str): The ID of the recipient (target account).
-          quote_id (str): The ID of the quote (quote UUID).
-          reference (str): Reference for the transfer (required).
-          customer_transaction_id (str, optional): Customer transaction ID.
+          quote_uuid (str): The UUID of the quote.
+          target_account (int): The ID of the target recipient account.
+          source_account (int, optional): The ID of the source account (refund).
+          customer_transaction_id (str, optional): Customer transaction ID. If not provided, a UUID will be generated.
+          reference (str, optional): Reference for the transfer (required).
           transfer_purpose (str, optional): Purpose of the transfer.
           transfer_purpose_sub (str, optional): Sub-purpose of the transfer.
           transfer_purpose_invoice (str, optional): Invoice number.
@@ -38,24 +41,25 @@ def create_transfer(
   transfer_api = wise_api_client.TransfersApi(api_client)
 
   if not customer_transaction_id:
-    import uuid
     customer_transaction_id = str(uuid.uuid4())
 
-  # Create TransferDetails object using Python field names
-  transfer_details = wise_api_client.TransferDetails(
-    reference=reference,
-    transfer_purpose=transfer_purpose,
-    transfer_purpose_sub_transfer_purpose=transfer_purpose_sub,
-    transfer_purpose_invoice_number=transfer_purpose_invoice,
-    source_of_funds=source_of_funds
-  )
+  details = None
+  if reference:
+    details = wise_api_client.TransferDetails(
+      reference=reference,
+      transfer_purpose=transfer_purpose,
+      transfer_purpose_sub_transfer_purpose=transfer_purpose_sub,
+      transfer_purpose_invoice_number=transfer_purpose_invoice,
+      source_of_funds=source_of_funds
+    )
 
   # Create CreateStandardTransferRequest object using Python field names
   create_standard_transfer_request = wise_api_client.CreateStandardTransferRequest(
-    target_account=int(recipient_id),
-    quote_uuid=quote_id,
+    target_account=target_account,
+    source_account=source_account,
+    quote_uuid=quote_uuid,
     customer_transaction_id=customer_transaction_id,
-    details=transfer_details
+    details=details
   )
 
   return transfer_api.create_transfer(create_standard_transfer_request)

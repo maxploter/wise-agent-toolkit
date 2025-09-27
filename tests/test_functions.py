@@ -16,15 +16,15 @@ class TestWiseFunctions(unittest.TestCase):
             mock_transfer_api.create_transfer.return_value = mock_response
 
             context = {"account": "test-account"}
-            recipient_id = "12345"
-            quote_id = "quote-uuid-123"
+            target_account = 12345
+            quote_uuid = "quote-uuid-123"
             reference = "Test Payment"
 
             result = create_transfer(
                 api_client=mock_api_client,
                 context=context,
-                recipient_id=recipient_id,
-                quote_id=quote_id,
+                target_account=target_account,
+                quote_uuid=quote_uuid,
                 reference=reference
             )
 
@@ -34,8 +34,8 @@ class TestWiseFunctions(unittest.TestCase):
 
             call_args = mock_transfer_api.create_transfer.call_args[0][0]
 
-            self.assertEqual(int(recipient_id), call_args.target_account)
-            self.assertEqual(quote_id, call_args.quote_uuid)
+            self.assertEqual(target_account, call_args.target_account)
+            self.assertEqual(quote_uuid, call_args.quote_uuid)
             self.assertEqual(reference, call_args.details.reference)
 
             self.assertEqual(result, mock_response)

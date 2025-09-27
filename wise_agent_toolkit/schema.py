@@ -5,19 +5,24 @@ from pydantic import BaseModel, Field
 class CreateTransfer(BaseModel):
     """Schema for the ``create_transfer`` operation."""
 
-    recipient_id: str = Field(
+    target_account: int = Field(
         ...,
-        description="The ID of the recipient (target account).",
+        description="The ID of the target recipient account.",
     )
 
-    quote_id: str = Field(
+    quote_uuid: str = Field(
         ...,
-        description="The ID of the quote (quote UUID).",
+        description="The UUID of the quote.",
     )
 
-    reference: str = Field(
-        ...,
-        description="Reference for the transfer (required, max 100 chars).",
+    reference: Optional[str] = Field(
+        None,
+        description="Reference for the transfer (optional, max 100 chars).",
+    )
+
+    source_account: Optional[int] = Field(
+        None,
+        description="The ID of the source account (for refunds).",
     )
 
     customer_transaction_id: Optional[str] = Field(
