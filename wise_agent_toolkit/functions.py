@@ -68,6 +68,7 @@ def create_quote(
   target_currency: str,
   source_amount: Optional[float] = None,
   target_amount: Optional[float] = None,
+  target_account: Optional[int] = None,
   profile_id: Optional[str] = None,
   pay_out: Optional[str] = None,
   preferred_pay_in: Optional[str] = None,
@@ -114,23 +115,25 @@ def create_quote(
   # Create the appropriate request object based on which amount is provided
   if source_amount is not None:
     # Use CreateAuthenticatedSourceAmountQuoteRequest
-    quote_request = wise_api_client.CreateAuthenticatedSourceAmountQuoteRequest(
-      sourceCurrency=source_currency,
-      targetCurrency=target_currency,
-      sourceAmount=source_amount,
-      paymentMetadata=payment_metadata
-    )
+    quote_request_data = {
+      "source_currency": source_currency,
+      "target_currency": target_currency,
+      "source_amount": source_amount,
+    }
+    if payment_metadata:
+      quote_request_data["payment_metadata"] = payment_metadata
   else:
     # Use CreateAuthenticatedTargetAmountQuoteRequest
-    quote_request = wise_api_client.CreateAuthenticatedTargetAmountQuoteRequest(
-      sourceCurrency=source_currency,
-      targetCurrency=target_currency,
-      targetAmount=target_amount,
-      paymentMetadata=payment_metadata
-    )
+    quote_request_data = {
+      "source_currency": source_currency,
+      "target_currency": target_currency,
+      "target_amount": target_amount,
+    }
+    if payment_metadata:
+      quote_request_data["payment_metadata"] = payment_metadata
 
-  # Create the main request object
-  create_authenticated_quote_request = wise_api_client.CreateAuthenticatedQuoteRequest(quote_request)
+  # Create the main request object using kwargs
+  create_authenticated_quote_request = wise_api_client.CreateAuthenticatedQuoteRequest(**quote_request_data)
 
   # Make the API call
   return quotes_api.create_authenticated_quote(int(profile_id), create_authenticated_quote_request)
