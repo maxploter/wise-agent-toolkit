@@ -2,9 +2,10 @@ CREATE_TRANSFER_PROMPT = """
 This tool will create a transfer between accounts in Wise.
 
 It takes the following arguments:
-- recipient_id (str): The ID of the recipient (target account).
-- quote_id (str): The ID of the quote (quote UUID).
-- reference (str): Reference for the transfer (required, max 100 chars).
+- target_account (int): The ID of the target recipient account.
+- quote_uuid (str): The UUID of the quote.
+- reference (str, optional): Reference for the transfer (optional, max 100 chars).
+- source_account (int, optional): The ID of the source account (for refunds).
 - customer_transaction_id (str, optional): A unique ID for this transaction. If not provided, a UUID will be generated.
 - transfer_purpose (str, optional): Purpose of the transfer.
 - transfer_purpose_sub (str, optional): Sub-purpose of the transfer.
@@ -24,6 +25,7 @@ It takes the following arguments:
 - source_amount (float, optional): The amount in the source currency to be converted.
 - target_amount (float, optional): The amount in the target currency to receive.
   Note: Provide either source_amount or target_amount, not both.
+- target_account (int, optional): A unique recipient account identifier.
 - profile_id (str, optional): The profile ID. If not provided, will be taken from context.
 - pay_out (str, optional): The pay out method.
 - preferred_pay_in (str, optional): The preferred pay in method.

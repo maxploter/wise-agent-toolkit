@@ -16,15 +16,15 @@ class TestWiseFunctions(unittest.TestCase):
             mock_transfer_api.create_transfer.return_value = mock_response
 
             context = {"account": "test-account"}
-            recipient_id = "12345"
-            quote_id = "quote-uuid-123"
+            target_account = 12345
+            quote_uuid = "quote-uuid-123"
             reference = "Test Payment"
 
             result = create_transfer(
                 api_client=mock_api_client,
                 context=context,
-                recipient_id=recipient_id,
-                quote_id=quote_id,
+                target_account=target_account,
+                quote_uuid=quote_uuid,
                 reference=reference
             )
 
@@ -34,8 +34,8 @@ class TestWiseFunctions(unittest.TestCase):
 
             call_args = mock_transfer_api.create_transfer.call_args[0][0]
 
-            self.assertEqual(int(recipient_id), call_args.target_account)
-            self.assertEqual(quote_id, call_args.quote_uuid)
+            self.assertEqual(target_account, call_args.target_account)
+            self.assertEqual(quote_uuid, call_args.quote_uuid)
             self.assertEqual(reference, call_args.details.reference)
 
             self.assertEqual(result, mock_response)
@@ -68,10 +68,13 @@ class TestWiseFunctions(unittest.TestCase):
 
             call_args = mock_quotes_api.create_authenticated_quote.call_args
             self.assertEqual(int(context["profile_id"]), call_args[0][0])  # profile_id
-            self.assertEqual(source_currency, call_args[0][1].source_currency)
-            self.assertEqual(target_currency, call_args[0][1].target_currency)
-            self.assertEqual(source_amount, call_args[0][1].source_amount)
-            self.assertIsNone(call_args[0][1].target_amount)
+
+            # Access the actual instance from the oneOf wrapper
+            request_obj = call_args[0][1]
+            actual_request = request_obj.actual_instance
+            self.assertEqual(source_currency, actual_request.source_currency)
+            self.assertEqual(target_currency, actual_request.target_currency)
+            self.assertEqual(source_amount, actual_request.source_amount)
 
             self.assertEqual(result, mock_response)
 
