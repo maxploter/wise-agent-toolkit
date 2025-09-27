@@ -68,6 +68,11 @@ class CreateQuote(BaseModel):
         description="The amount in the target currency to receive. Provide either source_amount or target_amount, not both.",
     )
 
+    target_account: Optional[int] = Field(
+        None,
+        description="A unique recipient account identifier.",
+    )
+
     profile_id: Optional[str] = Field(
         None,
         description="The profile ID. If not provided, will be taken from context.",

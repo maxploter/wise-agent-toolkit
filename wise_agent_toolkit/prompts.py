@@ -24,6 +24,7 @@ It takes the following arguments:
 - source_amount (float, optional): The amount in the source currency to be converted.
 - target_amount (float, optional): The amount in the target currency to receive.
   Note: Provide either source_amount or target_amount, not both.
+- target_account (int, optional): A unique recipient account identifier.
 - profile_id (str, optional): The profile ID. If not provided, will be taken from context.
 - pay_out (str, optional): The pay out method.
 - preferred_pay_in (str, optional): The preferred pay in method.
