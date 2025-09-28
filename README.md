@@ -1,22 +1,50 @@
 # Wise (TransferWise) Agent Toolkit
 
-The Wise Agent Toolkit enables the integration of LangChain with Wise APIs to create and manage transfers programmatically. This library simplifies working with the Wise API and empowers developers to embed financial operations into AI-driven workflows using Python.
+The Wise Agent Toolkit enables the integration of various AI frameworks and libraries with Wise APIs to create and manage transfers programmatically. This library simplifies working with the Wise API and empowers developers to embed financial operations into AI-driven workflows using Python.
+
+The toolkit supports multiple AI libraries through optional dependencies, allowing you to install only what you need.
 
 Included below are basic instructions, but refer to the Python package documentation for more information.
 
 ## Python
 
 ### Installation
-You don't need this source code unless you want to modify the package. If you just want to use the package, run:
 
+#### Core Installation
+For the basic toolkit without any AI library integrations:
 ```bash
 pip install wise-agent-toolkit
 ```
+
+#### Integration-Specific Installation
+Choose your AI library and install the corresponding extra:
+
+**LangChain Integration:**
+```bash
+pip install wise-agent-toolkit[langchain]
+```
+
+**All Integrations (if you want everything):**
+```bash
+pip install wise-agent-toolkit[all]
+```
+
+**Development Installation:**
+```bash
+pip install wise-agent-toolkit[dev]
+```
+
+### Supported Integrations
+- ✅ **LangChain** - Full support with `wise-agent-toolkit[langchain]`
+- 🚧 **CrewAI** - Coming soon with `wise-agent-toolkit[crewai]`
+- 🚧 **AutoGen** - Coming soon with `wise-agent-toolkit[autogen]`
 
 ### Requirements
 - Python 3.11+
 
 ### Usage
+
+#### LangChain Integration
 The library needs to be configured with your Wise API key, which is available in your Wise account dashboard.
 
 ```python
@@ -56,6 +84,15 @@ response = agent.run("Create a transfer of 100 EUR to John Doe's account.")
 print(response)
 ```
 
+#### Checking Available Integrations
+You can check which integrations are available in your installation:
+
+```python
+from wise_agent_toolkit import get_available_integrations
+
+print("Available integrations:", get_available_integrations())
+```
+
 ### Examples
 For detailed examples, refer to the `/examples` directory in the source repository.
 
@@ -72,6 +109,14 @@ wise_agent_toolkit = WiseAgentToolkit(
     },
 )
 ```
+
+### Adding New Integration Support
+The library is designed to be extensible. To add support for a new AI library:
+
+1. Create a new directory under `wise_agent_toolkit/` for your integration
+2. Implement the integration-specific toolkit and tool classes inheriting from the base classes
+3. Add the optional dependency to `pyproject.toml`
+4. Update the main `__init__.py` to conditionally import your integration
 
 ## Supported API Methods
 - Create a quote
