@@ -20,12 +20,23 @@ try:
 except ImportError:
     pass
 
+_mcp_available = False
+try:
+    import mcp
+    _mcp_available = True
+except ImportError:
+    pass
+
 # Conditional integration exports
 __all__ = ["WiseAPI", "Configuration", "tools", "get_available_integrations"]
 
 if _langchain_available:
     from . import langchain as langchain_support
     __all__.append("langchain_support")
+
+if _mcp_available:
+    from . import mcp as mcp_support
+    __all__.append("mcp_support")
 
 def get_available_integrations():
     """Return a list of available integrations."""

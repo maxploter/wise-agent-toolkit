@@ -24,6 +24,11 @@ Choose your AI library and install the corresponding extra:
 pip install wise-agent-toolkit[langchain]
 ```
 
+**MCP (Model Context Protocol) Integration:**
+```bash
+pip install wise-agent-toolkit[mcp]
+```
+
 **All Integrations (if you want everything):**
 ```bash
 pip install wise-agent-toolkit[all]
@@ -36,6 +41,7 @@ pip install wise-agent-toolkit[dev]
 
 ### Supported Integrations
 - ✅ **LangChain** - Full support with `wise-agent-toolkit[langchain]`
+- ✅ **MCP (Model Context Protocol)** - Full support with `wise-agent-toolkit[mcp]`
 - 🚧 **CrewAI** - Coming soon with `wise-agent-toolkit[crewai]`
 - 🚧 **AutoGen** - Coming soon with `wise-agent-toolkit[autogen]`
 
@@ -83,6 +89,63 @@ agent = initialize_agent(
 response = agent.run("Create a transfer of 100 EUR to John Doe's account.")
 print(response)
 ```
+
+#### MCP (Model Context Protocol) Integration
+
+The MCP integration allows you to expose Wise API operations as an MCP server, which can be consumed by MCP-compatible clients like Claude Desktop, Cline, or other MCP clients.
+
+**Installation for MCP Integration Only:**
+```bash
+pip install wise-agent-toolkit[mcp]
+```
+
+**Environment Setup:**
+Set your Wise API credentials as environment variables:
+```bash
+export WISE_API_KEY="your_wise_api_key_here"
+export WISE_API_HOST="https://api.transferwise.com"  # or https://api.sandbox.transferwise.tech for testing
+```
+
+**Starting the MCP Server:**
+Run the MCP server from the command line:
+```bash
+python -m wise_agent_toolkit.mcp --api-key $WISE_API_KEY --host $WISE_API_HOST
+```
+
+Or with explicit values:
+```bash
+python -m wise_agent_toolkit.mcp --api-key "your_api_key" --host "https://api.transferwise.com"
+```
+
+**Using as an MCP Toolkit (Programmatic):**
+If you want to integrate the MCP tools programmatically:
+```python
+from wise_agent_toolkit.mcp.toolkit import WiseAgentToolkit
+
+wise_agent_toolkit = WiseAgentToolkit(
+    api_key="YOUR_WISE_API_KEY",
+    host="https://api.transferwise.com",
+    configuration={
+        "actions": {
+            "transfers": {
+                "create": True,
+            },
+        }
+    },
+)
+
+# Get MCP-compatible tools
+tools = wise_agent_toolkit.get_tools()
+```
+
+**Server Configuration:**
+The MCP server supports the following command-line options:
+- `--api-key`: Your Wise API key (required)
+- `--host`: Wise API host URL (default: sandbox)
+- `--server-name`: MCP server name (default: "wise-agent-toolkit")
+
+For production use, always use `https://api.transferwise.com` as the host.
+For testing and development, use `https://api.sandbox.transferwise.tech` (default).
 
 #### Checking Available Integrations
 You can check which integrations are available in your installation:

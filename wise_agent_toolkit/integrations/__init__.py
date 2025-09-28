@@ -17,6 +17,13 @@ try:
 except ImportError:
     pass
 
+# MCP support
+try:
+    import mcp
+    _available_integrations.append("mcp")
+except ImportError:
+    pass
+
 # Future integration checks can be added here
 # try:
 #     import crewai
