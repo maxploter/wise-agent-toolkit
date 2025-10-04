@@ -8,7 +8,7 @@ It creates a new server instance since MCP uses stdio communication.
 import asyncio
 import json
 import sys
-import subprocess
+import os
 
 
 async def test_mcp_server():
@@ -17,7 +17,7 @@ async def test_mcp_server():
   # Server command with your credentials
   cmd = [
     sys.executable, "-m", "wise_agent_toolkit.mcp",
-    "--api_key", "979999c9-10cf-4da2-9f58-77a7edb57d03",
+    "--api_key", os.getenv("WISE_API_KEY"),
     "--host", "https://api.sandbox.transferwise.tech",
     "--profile_id", "25",
   ]
