@@ -152,6 +152,15 @@ class CreateRecipientAccount(BaseModel):
     extra = "allow"  # Allow additional fields for dynamic properties
 
 
+class DeactivateRecipientAccount(BaseModel):
+  """Schema for the ``deactivate_recipient_account`` operation."""
+
+  account_id: int = Field(
+    ...,
+    description="The ID of the recipient account to deactivate.",
+  )
+
+
 class ListTransfers(BaseModel):
   """Schema for the ``list_transfers`` operation."""
 

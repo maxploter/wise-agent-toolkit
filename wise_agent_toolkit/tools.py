@@ -3,12 +3,12 @@ from typing import Dict, List
 from .prompts import (
   CREATE_TRANSFER_PROMPT, CREATE_QUOTE_PROMPT, LIST_RECIPIENT_ACCOUNTS_PROMPT, CREATE_RECIPIENT_ACCOUNT_PROMPT,
   LIST_TRANSFERS_PROMPT, CANCEL_TRANSFER_PROMPT, GET_TRANSFER_BY_ID_PROMPT, LIST_PROFILES_PROMPT,
-  GET_PROFILE_BY_ID_PROMPT, GET_QUOTE_BY_ID_PROMPT,
+  GET_PROFILE_BY_ID_PROMPT, GET_QUOTE_BY_ID_PROMPT, DEACTIVATE_RECIPIENT_ACCOUNT_PROMPT,
 )
 
 from .schema import (
   CreateTransfer, CreateQuote, ListRecipientAccounts, CreateRecipientAccount, ListTransfers, CancelTransfer,
-  GetTransferById, ListProfiles, GetProfileById, GetQuoteById,
+  GetTransferById, ListProfiles, GetProfileById, GetQuoteById, DeactivateRecipientAccount,
 )
 
 tools: List[Dict] = [
@@ -53,6 +53,17 @@ tools: List[Dict] = [
     "actions": {
       "recipients": {
         "create": True,
+      }
+    },
+  },
+  {
+    "method": "deactivate_recipient_account",
+    "name": "Deactivate Recipient Account",
+    "description": DEACTIVATE_RECIPIENT_ACCOUNT_PROMPT,
+    "args_schema": DeactivateRecipientAccount,
+    "actions": {
+      "recipients": {
+        "delete": True,
       }
     },
   },
