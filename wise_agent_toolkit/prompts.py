@@ -34,6 +34,25 @@ Returns:
     The created quote object from Wise.
 """
 
+UPDATE_QUOTE_PROMPT = """
+This tool will update an existing quote for currency conversion in Wise.
+
+It takes the following arguments:
+- quote_id (str): The ID of the quote to update.
+- source_currency (str): The source currency code (3-letter ISO currency code).
+- target_currency (str): The target currency code (3-letter ISO currency code).
+- source_amount (float, optional): The amount in the source currency to be converted.
+- target_amount (float, optional): The amount in the target currency to receive.
+  Note: Provide either source_amount or target_amount, not both.
+- target_account (int, optional): A unique recipient account identifier.
+- profile_id (str, optional): The profile ID. If not provided, will be taken from context.
+- pay_out (str, optional): The pay out method.
+- preferred_pay_in (str, optional): The preferred pay in method.
+
+Returns:
+    The updated quote object from Wise.
+"""
+
 LIST_RECIPIENT_ACCOUNTS_PROMPT = """
 This tool will list recipient accounts registered in Wise.
 
