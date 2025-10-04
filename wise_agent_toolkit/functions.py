@@ -232,6 +232,28 @@ def list_recipient_accounts(
   )
 
 
+def deactivate_recipient_account(
+  api_client,
+  context: Context,
+  account_id: int,
+):
+  """
+  Deactivate a recipient account.
+
+  Parameters:
+      api_client: The Wise API client.
+      context (Context): The context.
+      account_id (int): The ID of the recipient account to deactivate.
+
+  Returns:
+      The deactivated recipient account.
+  """
+  recipients_api = wise_api_client.RecipientsApi(api_client)
+
+  # Make the API call
+  return recipients_api.deactivate_recipient_account(account_id=account_id)
+
+
 def list_transfers(
   api_client,
   context: Context,

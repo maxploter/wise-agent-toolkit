@@ -65,6 +65,16 @@ Returns:
     The created recipient account object from Wise.
 """
 
+DEACTIVATE_RECIPIENT_ACCOUNT_PROMPT = """
+This tool will deactivate a recipient account in Wise.
+
+It takes the following arguments:
+- account_id (int): The ID of the recipient account to deactivate.
+
+Returns:
+    The deactivated recipient account object from Wise.
+"""
+
 LIST_TRANSFERS_PROMPT = """
 This tool will list transfers in Wise.
 
