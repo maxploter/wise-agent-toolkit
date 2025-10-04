@@ -136,6 +136,7 @@ def create_quote(
   create_authenticated_quote_request = wise_api_client.CreateAuthenticatedQuoteRequest(r)
   return quotes_api.create_authenticated_quote(int(profile_id), create_authenticated_quote_request)
 
+
 def create_recipient_account(
   api_client,
   context: Context,
@@ -229,6 +230,7 @@ def list_recipient_accounts(
     size=size,
     seek_position=seek_position
   )
+
 
 def list_transfers(
   api_client,
