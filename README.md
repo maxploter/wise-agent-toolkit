@@ -186,4 +186,4 @@ The library is designed to be extensible. To add support for a new AI library:
 - Create a quote
 - List recipient accounts
 - Create recipient account
-- Create a transfer (WIP)
+- Create a transfer
