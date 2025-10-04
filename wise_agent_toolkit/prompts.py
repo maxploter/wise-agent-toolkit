@@ -144,3 +144,13 @@ It takes the following arguments:
 Returns:
     The quote object from Wise containing all quote information including exchange rates, fees, and delivery times.
 """
+
+GET_RECIPIENT_ACCOUNT_BY_ID_PROMPT = """
+This tool will retrieve a specific recipient account by its ID in Wise.
+
+It takes the following arguments:
+- account_id (int): The ID of the recipient account to retrieve.
+
+Returns:
+    The recipient account object from Wise containing detailed information about the recipient.
+"""

@@ -416,3 +416,24 @@ def get_quote_by_id(
       raise ValueError("Profile ID must be provided either as a parameter or in context.")
 
   return quotes_api.get_quote_by_id(profile_id=int(profile_id), quote_id=quote_id)
+
+
+def get_recipient_account_by_id(
+  api_client,
+  context: Context,
+  account_id: int,
+):
+  """
+  Get a recipient account by its ID.
+
+  Parameters:
+      api_client: The Wise API client.
+      context (Context): The context.
+      account_id (int): The ID of the recipient account to retrieve.
+
+  Returns:
+      The recipient account object from Wise.
+  """
+  recipients_api = wise_api_client.RecipientsApi(api_client)
+
+  return recipients_api.get_recipient_account_by_id(account_id=account_id)
