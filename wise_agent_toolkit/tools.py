@@ -2,12 +2,12 @@ from typing import Dict, List
 
 from .prompts import (
   CREATE_TRANSFER_PROMPT, CREATE_QUOTE_PROMPT, LIST_RECIPIENT_ACCOUNTS_PROMPT, CREATE_RECIPIENT_ACCOUNT_PROMPT,
-  LIST_TRANSFERS_PROMPT, CANCEL_TRANSFER_PROMPT, GET_TRANSFER_BY_ID_PROMPT,
+  LIST_TRANSFERS_PROMPT, CANCEL_TRANSFER_PROMPT, GET_TRANSFER_BY_ID_PROMPT, LIST_PROFILES_PROMPT,
 )
 
 from .schema import (
   CreateTransfer, CreateQuote, ListRecipientAccounts, CreateRecipientAccount, ListTransfers, CancelTransfer,
-  GetTransferById,
+  GetTransferById, ListProfiles,
 )
 
 tools: List[Dict] = [
@@ -84,6 +84,17 @@ tools: List[Dict] = [
     "args_schema": GetTransferById,
     "actions": {
       "transfers": {
+        "read": True,
+      }
+    },
+  },
+  {
+    "method": "list_profiles",
+    "name": "List Profiles",
+    "description": LIST_PROFILES_PROMPT,
+    "args_schema": ListProfiles,
+    "actions": {
+      "profiles": {
         "read": True,
       }
     },

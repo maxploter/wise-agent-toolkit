@@ -2,7 +2,7 @@ import unittest
 from unittest import mock
 
 from wise_agent_toolkit.functions import create_transfer, create_quote, list_recipient_accounts, \
-  create_recipient_account, list_transfers
+  create_recipient_account, list_transfers, list_profiles
 
 
 class TestWiseFunctions(unittest.TestCase):
@@ -304,6 +304,48 @@ class TestWiseFunctions(unittest.TestCase):
         )
 
       self.assertEqual(str(cm.exception), "Profile ID must be provided either as a parameter or in context.")
+
+  def test_list_profiles(self):
+    mock_api_client = mock.Mock()
+    mock_profiles_api = mock.Mock()
+    mock_response = [
+      {
+        "id": 123,
+        "type": "personal",
+        "details": {
+          "firstName": "John",
+          "lastName": "Doe",
+          "dateOfBirth": "1990-01-01",
+          "phoneNumber": "+1234567890"
+        }
+      },
+      {
+        "id": 456,
+        "type": "business",
+        "details": {
+          "name": "Acme Corp",
+          "registrationNumber": "12345678",
+          "companyType": "LIMITED",
+          "companyRole": "OWNER"
+        }
+      }
+    ]
+
+    with mock.patch("wise_api_client.ProfilesApi") as mock_profiles_api_class:
+      mock_profiles_api_class.return_value = mock_profiles_api
+      mock_profiles_api.list_profiles.return_value = mock_response
+
+      context = {}
+
+      result = list_profiles(
+        api_client=mock_api_client,
+        context=context
+      )
+
+      mock_profiles_api_class.assert_called_once_with(mock_api_client)
+      mock_profiles_api.list_profiles.assert_called_once_with()
+
+      self.assertEqual(result, mock_response)
 
 
 if __name__ == "__main__":

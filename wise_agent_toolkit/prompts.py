@@ -104,3 +104,12 @@ It takes the following arguments:
 Returns:
     The transfer object from Wise containing detailed information about the transfer including its status, amounts, currencies, and other transfer details.
 """
+
+LIST_PROFILES_PROMPT = """
+This tool will list profiles in Wise.
+
+It takes no arguments and returns all profiles associated with the authenticated user.
+
+Returns:
+    A list of profiles from Wise containing information about each profile including profile ID, type, and details.
+"""

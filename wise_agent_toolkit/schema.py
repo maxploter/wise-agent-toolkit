@@ -212,3 +212,10 @@ class GetTransferById(BaseModel):
     ...,
     description="The ID of the transfer to retrieve.",
   )
+
+
+class ListProfiles(BaseModel):
+  """Schema for the ``list_profiles`` operation."""
+
+  class Config:
+    extra = "forbid"

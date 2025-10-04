@@ -324,3 +324,23 @@ def get_transfer_by_id(
   transfer_api = wise_api_client.TransfersApi(api_client)
 
   return transfer_api.get_transfer_by_id(transfer_id)
+
+
+def list_profiles(
+  api_client,
+  context: Context,
+):
+  """
+  List profiles.
+
+  Parameters:
+      api_client: The Wise API client.
+      context (Context): The context.
+
+  Returns:
+      List: A list of profiles from Wise containing information about each profile.
+  """
+  profiles_api = wise_api_client.ProfilesApi(api_client)
+
+  # Make the API call
+  return profiles_api.list_profiles()
