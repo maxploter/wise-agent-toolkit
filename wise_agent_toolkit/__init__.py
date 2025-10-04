@@ -15,29 +15,34 @@ from .integrations import get_available_integrations as _get_integration_list
 # Integration-specific imports (optional)
 _langchain_available = False
 try:
-    import langchain
-    _langchain_available = True
+  import langchain
+
+  _langchain_available = True
 except ImportError:
-    pass
+  pass
 
 _mcp_available = False
 try:
-    import mcp
-    _mcp_available = True
+  import mcp
+
+  _mcp_available = True
 except ImportError:
-    pass
+  pass
 
 # Conditional integration exports
 __all__ = ["WiseAPI", "Configuration", "tools", "get_available_integrations"]
 
 if _langchain_available:
-    from . import langchain as langchain_support
-    __all__.append("langchain_support")
+  from . import langchain as langchain_support
+
+  __all__.append("langchain_support")
 
 if _mcp_available:
-    from . import mcp as mcp_support
-    __all__.append("mcp_support")
+  from . import mcp as mcp_support
+
+  __all__.append("mcp_support")
+
 
 def get_available_integrations():
-    """Return a list of available integrations."""
-    return _get_integration_list()
+  """Return a list of available integrations."""
+  return _get_integration_list()

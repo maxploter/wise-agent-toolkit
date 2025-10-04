@@ -12,17 +12,20 @@ _available_integrations = []
 
 # LangChain support
 try:
-    import langchain
-    _available_integrations.append("langchain")
+  import langchain
+
+  _available_integrations.append("langchain")
 except ImportError:
-    pass
+  pass
 
 # MCP support
 try:
-    import mcp
-    _available_integrations.append("mcp")
+  import mcp
+
+  _available_integrations.append("mcp")
 except ImportError:
-    pass
+  pass
+
 
 # Future integration checks can be added here
 # try:
@@ -32,11 +35,13 @@ except ImportError:
 #     pass
 
 def get_available_integrations() -> List[str]:
-    """Return a list of available integrations."""
-    return _available_integrations.copy()
+  """Return a list of available integrations."""
+  return _available_integrations.copy()
+
 
 def check_integration_availability(integration: str) -> bool:
-    """Check if a specific integration is available."""
-    return integration in _available_integrations
+  """Check if a specific integration is available."""
+  return integration in _available_integrations
+
 
 __all__ = ["get_available_integrations", "check_integration_availability"]
