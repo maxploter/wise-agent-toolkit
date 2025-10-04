@@ -94,3 +94,13 @@ Returns:
 Note: Only transfers in certain states can be cancelled (e.g., incoming_payment_waiting, processing). 
 Transfers that have already been sent or completed cannot be cancelled.
 """
+
+GET_TRANSFER_BY_ID_PROMPT = """
+This tool will retrieve a transfer by its ID in Wise.
+
+It takes the following arguments:
+- transfer_id (int): The ID of the transfer to retrieve.
+
+Returns:
+    The transfer object from Wise containing detailed information about the transfer including its status, amounts, currencies, and other transfer details.
+"""

@@ -303,3 +303,24 @@ def cancel_transfer(
   transfer_api = wise_api_client.TransfersApi(api_client)
 
   return transfer_api.cancel_transfer(transfer_id)
+
+
+def get_transfer_by_id(
+  api_client,
+  context: Context,
+  transfer_id: int
+):
+  """
+  Get a transfer by its ID.
+
+  Parameters:
+      api_client: The Wise API client.
+      context (Context): The context.
+      transfer_id (int): The ID of the transfer to retrieve.
+
+  Returns:
+      The transfer object from Wise.
+  """
+  transfer_api = wise_api_client.TransfersApi(api_client)
+
+  return transfer_api.get_transfer_by_id(transfer_id)

@@ -203,3 +203,12 @@ class CancelTransfer(BaseModel):
     ...,
     description="The ID of the transfer to cancel.",
   )
+
+
+class GetTransferById(BaseModel):
+  """Schema for the ``get_transfer_by_id`` operation."""
+
+  transfer_id: int = Field(
+    ...,
+    description="The ID of the transfer to retrieve.",
+  )
