@@ -209,9 +209,9 @@ with mock.patch("wise_api_client.{ApiClass}Api") as mock_api_class:
    - **API Client Documentation**: https://github.com/maxploter/wise-python (see README.md and docs/ folder)
 2. **Follow Existing Patterns**: Reference `create_transfer`, `create_quote`, `list_recipient_accounts` as canonical examples
 3. **Update All 5 Files**: Never skip any of the required files
-4. **Update README**: Add the new tool to the "Supported Tools" section in README.md with description and usage
+4. **Update README**: Add the new tool to the "## Supported API Methods" section in README.md with description and usage
 5. **Test Thoroughly**: Include comprehensive unit tests with proper mocking
-6. **Validate Changes**: Run tests after implementation to ensure no regressions (use unittest)
+6. **Validate Changes**: Run tests after implementation to ensure no regressions (do not use the pytest instead use unittest)
 
 ## Common Parameters
 

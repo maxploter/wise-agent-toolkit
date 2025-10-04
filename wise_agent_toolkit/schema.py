@@ -219,3 +219,12 @@ class ListProfiles(BaseModel):
 
   class Config:
     extra = "forbid"
+
+
+class GetProfileById(BaseModel):
+  """Schema for the ``get_profile_by_id`` operation."""
+
+  profile_id: int = Field(
+    ...,
+    description="The ID of the profile to retrieve.",
+  )
