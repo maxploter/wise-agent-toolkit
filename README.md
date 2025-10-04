@@ -21,23 +21,25 @@ Choose your AI library and install the corresponding extra:
 
 **LangChain Integration:**
 ```bash
-pip install wise-agent-toolkit[langchain]
+pip install "wise-agent-toolkit[langchain]"
 ```
 
 **MCP (Model Context Protocol) Integration:**
 ```bash
-pip install wise-agent-toolkit[mcp]
+pip install "wise-agent-toolkit[mcp]"
 ```
 
 **All Integrations (if you want everything):**
 ```bash
-pip install wise-agent-toolkit[all]
+pip install "wise-agent-toolkit[all]"
 ```
 
 **Development Installation:**
 ```bash
-pip install wise-agent-toolkit[dev]
+pip install "wise-agent-toolkit[dev]"
 ```
+
+> **Note for macOS/zsh users:** The package name must be quoted to prevent shell interpretation of square brackets. Alternatively, you can escape the brackets: `pip install wise-agent-toolkit\[mcp\]`
 
 ### Supported Integrations
 - ✅ **LangChain** - Full support with `wise-agent-toolkit[langchain]`
@@ -186,4 +188,4 @@ The library is designed to be extensible. To add support for a new AI library:
 - Create a quote
 - List recipient accounts
 - Create recipient account
-- Create a transfer (WIP)
+- Create a transfer
