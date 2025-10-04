@@ -36,6 +36,11 @@ langchain = [
     "openai>=1.66.0",
 ]
 
+# MCP (Model Context Protocol) integration support
+mcp = [
+    "mcp>=1.0.0",
+]
+
 # Future integration support can be added here
 # crewai = ["crewai>=0.1.0"]
 # autogen = ["autogen>=0.1.0"]
@@ -52,6 +57,7 @@ dev = [
 # All integrations (convenience extra)
 all = [
     "wise-agent-toolkit[langchain]",
+    "wise-agent-toolkit[mcp]",
 ]
 
 [project.urls]

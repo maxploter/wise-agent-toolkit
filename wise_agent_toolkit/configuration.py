@@ -42,8 +42,16 @@ class Configuration(TypedDict, total=False):
     actions: Optional[Actions]
     context: Optional[Context]
 
+ACTIONS_ALL: Actions = {
+    "transfers": {"create": True, "update": True, "read": True},
+    "profiles": {"create": True, "update": True, "read": True},
+    "quotes": {"create": True, "update": True, "read": True},
+    "recipients": {"create": True, "update": True, "read": True},
+    "balances": {"read": True},
+}
 
 def is_tool_allowed(tool, configuration):
+    # Configuration should never be None now that we provide defaults
     for resource, permissions in tool.get("actions").items():
         if resource not in configuration.get("actions", {}):
             return False
