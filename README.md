@@ -185,12 +185,22 @@ The library is designed to be extensible. To add support for a new AI library:
 4. Update the main `__init__.py` to conditionally import your integration
 
 ## Supported API Methods
+### Quotes
 - Create a quote
+- Get quote by ID
+
+### Recipients
 - List recipient accounts
 - Create recipient account
+- Get recipient account by ID
+- Deactivate recipient account
+
+### Transfers
 - Create a transfer
 - Get transfer by ID
 - List transfers
 - Cancel a transfer
+
+### Profiles
 - List profiles
 - Get profile by ID

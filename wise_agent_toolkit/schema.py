@@ -251,3 +251,12 @@ class GetQuoteById(BaseModel):
     None,
     description="The profile ID. If not provided, will be taken from context.",
   )
+
+
+class GetRecipientAccountById(BaseModel):
+  """Schema for the ``get_recipient_account_by_id`` operation."""
+
+  account_id: int = Field(
+    ...,
+    description="The ID of the recipient account to retrieve.",
+  )

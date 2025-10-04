@@ -2,7 +2,8 @@ import unittest
 from unittest import mock
 
 from wise_agent_toolkit.functions import create_transfer, create_quote, list_recipient_accounts, \
-  create_recipient_account, deactivate_recipient_account, list_transfers, list_profiles, get_profile_by_id, get_quote_by_id
+  create_recipient_account, deactivate_recipient_account, list_transfers, list_profiles, get_profile_by_id, get_quote_by_id, \
+  get_recipient_account_by_id
 
 
 class TestWiseFunctions(unittest.TestCase):
@@ -483,6 +484,45 @@ class TestWiseFunctions(unittest.TestCase):
         )
 
       self.assertEqual(str(cm.exception), "Profile ID must be provided either as a parameter or in context.")
+
+  def test_get_recipient_account_by_id(self):
+    mock_api_client = mock.Mock()
+    mock_recipients_api = mock.Mock()
+    mock_response = {
+      "id": 12345,
+      "account_holder_name": "John Doe",
+      "currency": "USD",
+      "country": "US",
+      "type": "email",
+      "active": True,
+      "details": {
+        "email": "john.doe@example.com",
+        "address": {
+          "country": "US",
+          "city": "New York",
+          "postCode": "10001",
+          "firstLine": "123 Main St"
+        }
+      }
+    }
+
+    with mock.patch("wise_api_client.RecipientsApi") as mock_recipients_api_class:
+      mock_recipients_api_class.return_value = mock_recipients_api
+      mock_recipients_api.get_recipient_account_by_id.return_value = mock_response
+
+      context = {}
+      account_id = 12345
+
+      result = get_recipient_account_by_id(
+        api_client=mock_api_client,
+        context=context,
+        account_id=account_id
+      )
+
+      mock_recipients_api_class.assert_called_once_with(mock_api_client)
+      mock_recipients_api.get_recipient_account_by_id.assert_called_once_with(account_id=account_id)
+
+      self.assertEqual(result, mock_response)
 
 
 if __name__ == "__main__":

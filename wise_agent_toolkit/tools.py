@@ -4,11 +4,13 @@ from .prompts import (
   CREATE_TRANSFER_PROMPT, CREATE_QUOTE_PROMPT, LIST_RECIPIENT_ACCOUNTS_PROMPT, CREATE_RECIPIENT_ACCOUNT_PROMPT,
   LIST_TRANSFERS_PROMPT, CANCEL_TRANSFER_PROMPT, GET_TRANSFER_BY_ID_PROMPT, LIST_PROFILES_PROMPT,
   GET_PROFILE_BY_ID_PROMPT, GET_QUOTE_BY_ID_PROMPT, DEACTIVATE_RECIPIENT_ACCOUNT_PROMPT,
+  GET_RECIPIENT_ACCOUNT_BY_ID_PROMPT,
 )
 
 from .schema import (
   CreateTransfer, CreateQuote, ListRecipientAccounts, CreateRecipientAccount, ListTransfers, CancelTransfer,
   GetTransferById, ListProfiles, GetProfileById, GetQuoteById, DeactivateRecipientAccount,
+  GetRecipientAccountById,
 )
 
 tools: List[Dict] = [
@@ -129,6 +131,17 @@ tools: List[Dict] = [
     "args_schema": GetQuoteById,
     "actions": {
       "quotes": {
+        "read": True,
+      }
+    },
+  },
+  {
+    "method": "get_recipient_account_by_id",
+    "name": "Get Recipient Account By ID",
+    "description": GET_RECIPIENT_ACCOUNT_BY_ID_PROMPT,
+    "args_schema": GetRecipientAccountById,
+    "actions": {
+      "recipients": {
         "read": True,
       }
     },
