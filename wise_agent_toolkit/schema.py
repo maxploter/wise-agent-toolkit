@@ -194,3 +194,12 @@ class ListTransfers(BaseModel):
     None,
     description="Offset for pagination (default 0).",
   )
+
+
+class CancelTransfer(BaseModel):
+  """Schema for the ``cancel_transfer`` operation."""
+
+  transfer_id: int = Field(
+    ...,
+    description="The ID of the transfer to cancel.",
+  )
