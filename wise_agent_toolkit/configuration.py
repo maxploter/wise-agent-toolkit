@@ -47,7 +47,7 @@ ACTIONS_ALL: Actions = {
   "transfers": {"create": True, "update": True, "read": True},
   "profiles": {"create": True, "update": True, "read": True},
   "quotes": {"create": True, "update": True, "read": True},
-  "recipients": {"create": True, "update": True, "read": True},
+  "recipients": {"create": True, "update": True, "read": True, "delete": True},
   "balances": {"read": True},
 }
 
