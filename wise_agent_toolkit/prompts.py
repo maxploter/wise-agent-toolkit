@@ -64,3 +64,20 @@ It takes the following arguments:
 Returns:
     The created recipient account object from Wise.
 """
+
+LIST_TRANSFERS_PROMPT = """
+This tool will list transfers in Wise.
+
+It takes the following arguments:
+- profile (int, optional): The profile ID to list transfers for. If not provided, will be taken from context.
+- status (str, optional): Filter transfers by status (e.g., incoming_payment_waiting, processing, sent, cancelled).
+- source_currency (str, optional): Filter transfers by source currency (3-letter ISO currency code).
+- target_currency (str, optional): Filter transfers by target currency (3-letter ISO currency code).
+- created_date_start (datetime, optional): Filter transfers created after this date.
+- created_date_end (datetime, optional): Filter transfers created before this date.
+- limit (int, optional): Number of items per page for pagination (default 20).
+- offset (int, optional): Offset for pagination (default 0).
+
+Returns:
+    A list of transfers from Wise containing information about each transfer.
+"""

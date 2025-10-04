@@ -9,10 +9,11 @@ This is a placeholder for future implementation.
 
 # Check for CrewAI availability
 try:
-    import crewai
-    _CREWAI_AVAILABLE = True
+  import crewai
+
+  _CREWAI_AVAILABLE = True
 except ImportError:
-    _CREWAI_AVAILABLE = False
+  _CREWAI_AVAILABLE = False
 
 # Future implementation will go here
 # from .toolkit import WiseCrewAIToolkit
@@ -20,11 +21,12 @@ except ImportError:
 
 __all__ = []
 
+
 def check_crewai_availability():
-    """Check if CrewAI is available for use."""
-    if not _CREWAI_AVAILABLE:
-        raise ImportError(
-            "CrewAI is required for this functionality. "
-            "Install it with: pip install wise-agent-toolkit[crewai]"
-        )
-    return True
+  """Check if CrewAI is available for use."""
+  if not _CREWAI_AVAILABLE:
+    raise ImportError(
+      "CrewAI is required for this functionality. "
+      "Install it with: pip install wise-agent-toolkit[crewai]"
+    )
+  return True

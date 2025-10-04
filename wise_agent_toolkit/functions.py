@@ -1,4 +1,5 @@
 from typing import Optional
+from datetime import datetime
 
 import wise_api_client
 
@@ -135,6 +136,7 @@ def create_quote(
   create_authenticated_quote_request = wise_api_client.CreateAuthenticatedQuoteRequest(r)
   return quotes_api.create_authenticated_quote(int(profile_id), create_authenticated_quote_request)
 
+
 def create_recipient_account(
   api_client,
   context: Context,
@@ -227,4 +229,56 @@ def list_recipient_accounts(
     currency=currency,
     size=size,
     seek_position=seek_position
+  )
+
+
+def list_transfers(
+  api_client,
+  context: Context,
+  profile: Optional[int] = None,
+  status: Optional[str] = None,
+  source_currency: Optional[str] = None,
+  target_currency: Optional[str] = None,
+  created_date_start: Optional[datetime] = None,
+  created_date_end: Optional[datetime] = None,
+  limit: Optional[int] = None,
+  offset: Optional[int] = None,
+):
+  """
+  List transfers.
+
+  Parameters:
+      api_client: The Wise API client.
+      context (Context): The context.
+      profile (int, optional): The profile ID. If not provided, will be taken from context.
+      status (str, optional): Filter by transfer status.
+      source_currency (str, optional): Filter by source currency.
+      target_currency (str, optional): Filter by target currency.
+      created_date_start (datetime, optional): Filter transfers created after this date.
+      created_date_end (datetime, optional): Filter transfers created before this date.
+      limit (int, optional): Number of items per page (default 20).
+      offset (int, optional): Offset for pagination (default 0).
+
+  Returns:
+      List of transfers.
+  """
+  transfers_api = wise_api_client.TransfersApi(api_client)
+
+  # Get profile ID from context if not provided
+  if not profile:
+    profile = context.get("profile_id")
+    if not profile:
+      raise ValueError("Profile ID must be provided either as a parameter or in context.")
+    profile = int(profile)
+
+  # Make the API call
+  return transfers_api.list_transfers(
+    profile=profile,
+    status=status,
+    source_currency=source_currency,
+    target_currency=target_currency,
+    created_date_start=created_date_start,
+    created_date_end=created_date_end,
+    limit=limit,
+    offset=offset
   )
