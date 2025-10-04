@@ -9,7 +9,7 @@ from wise_api_client import ApiClient
 
 from .configuration import Context
 from .functions import (
-    create_transfer, create_quote, list_recipient_accounts, create_recipient_account,
+    create_transfer, create_quote, list_recipient_accounts, create_recipient_account, list_transfers,
 )
 
 
@@ -50,6 +50,12 @@ class WiseAPI(BaseModel):
             recipient = create_recipient_account(self._api_client, self._context, *args, **kwargs).to_dict()
             return json.dumps(
                 recipient,
+                default=str # to_dict() does not serialize datetime objects
+            )
+        elif method == "list_transfers":
+            transfers = list_transfers(self._api_client, self._context, *args, **kwargs).to_dict()
+            return json.dumps(
+                transfers,
                 default=str # to_dict() does not serialize datetime objects
             )
         else:

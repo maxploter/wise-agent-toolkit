@@ -1,4 +1,5 @@
 from typing import Optional, Dict, Any
+from datetime import datetime
 from pydantic import BaseModel, Field
 
 
@@ -146,3 +147,46 @@ class CreateRecipientAccount(BaseModel):
 
     class Config:
         extra = "allow"  # Allow additional fields for dynamic properties
+
+class ListTransfers(BaseModel):
+    """Schema for the ``list_transfers`` operation."""
+
+    profile: Optional[int] = Field(
+        None,
+        description="The profile ID to list transfers for. If not provided, will be taken from context.",
+    )
+
+    status: Optional[str] = Field(
+        None,
+        description="Filter transfers by status (e.g., incoming_payment_waiting, processing, sent, cancelled).",
+    )
+
+    source_currency: Optional[str] = Field(
+        None,
+        description="Filter transfers by source currency (3-letter ISO currency code).",
+    )
+
+    target_currency: Optional[str] = Field(
+        None,
+        description="Filter transfers by target currency (3-letter ISO currency code).",
+    )
+
+    created_date_start: Optional[datetime] = Field(
+        None,
+        description="Filter transfers created after this date.",
+    )
+
+    created_date_end: Optional[datetime] = Field(
+        None,
+        description="Filter transfers created before this date.",
+    )
+
+    limit: Optional[int] = Field(
+        None,
+        description="Number of items per page for pagination (default 20).",
+    )
+
+    offset: Optional[int] = Field(
+        None,
+        description="Offset for pagination (default 0).",
+    )
