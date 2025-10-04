@@ -365,3 +365,32 @@ def get_profile_by_id(
   profiles_api = wise_api_client.ProfilesApi(api_client)
 
   return profiles_api.get_profile_by_id(profile_id)
+
+
+def get_quote_by_id(
+  api_client,
+  context: Context,
+  quote_id: str,
+  profile_id: Optional[str] = None,
+):
+  """
+  Get a quote by its ID.
+
+  Parameters:
+      api_client: The Wise API client.
+      context (Context): The context.
+      quote_id (str): The ID of the quote to retrieve.
+      profile_id (str, optional): The profile ID. If not provided, will be taken from context.
+
+  Returns:
+      The quote object from Wise.
+  """
+  quotes_api = wise_api_client.QuotesApi(api_client)
+
+  # Get profile ID from context if not provided
+  if not profile_id:
+    profile_id = context.get("profile_id")
+    if not profile_id:
+      raise ValueError("Profile ID must be provided either as a parameter or in context.")
+
+  return quotes_api.get_quote_by_id(profile_id=int(profile_id), quote_id=quote_id)

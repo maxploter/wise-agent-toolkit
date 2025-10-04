@@ -228,3 +228,17 @@ class GetProfileById(BaseModel):
     ...,
     description="The ID of the profile to retrieve.",
   )
+
+
+class GetQuoteById(BaseModel):
+  """Schema for the ``get_quote_by_id`` operation."""
+
+  quote_id: str = Field(
+    ...,
+    description="The ID of the quote to retrieve.",
+  )
+
+  profile_id: Optional[str] = Field(
+    None,
+    description="The profile ID. If not provided, will be taken from context.",
+  )
