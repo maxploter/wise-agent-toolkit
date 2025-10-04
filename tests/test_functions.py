@@ -1,7 +1,7 @@
 import unittest
 from unittest import mock
 
-from wise_agent_toolkit.functions import create_transfer, create_quote, list_recipient_accounts, \
+from wise_agent_toolkit.functions import create_transfer, create_quote, update_quote, list_recipient_accounts, \
   create_recipient_account, deactivate_recipient_account, list_transfers, list_profiles, get_profile_by_id, get_quote_by_id, \
   get_recipient_account_by_id
 
@@ -73,6 +73,47 @@ class TestWiseFunctions(unittest.TestCase):
 
       # Access the actual instance from the oneOf wrapper
       request_obj = call_args[0][1]
+      actual_request = request_obj.actual_instance
+      self.assertEqual(source_currency, actual_request.source_currency)
+      self.assertEqual(target_currency, actual_request.target_currency)
+      self.assertEqual(source_amount, actual_request.source_amount)
+
+      self.assertEqual(result, mock_response)
+
+  def test_update_quote(self):
+    mock_api_client = mock.Mock()
+    mock_quotes_api = mock.Mock()
+    mock_response = {"id": "quote-123", "rate": 1.25, "sourceAmount": 100, "targetAmount": 125}
+
+    with mock.patch("wise_api_client.QuotesApi") as mock_quotes_api_class:
+      mock_quotes_api_class.return_value = mock_quotes_api
+      mock_quotes_api.update_quote.return_value = mock_response
+
+      # Test with source_amount
+      context = {"profile_id": "456"}
+      quote_id = "quote-123"
+      source_currency = "USD"
+      target_currency = "EUR"
+      source_amount = 100
+
+      result = update_quote(
+        api_client=mock_api_client,
+        context=context,
+        quote_id=quote_id,
+        source_currency=source_currency,
+        target_currency=target_currency,
+        source_amount=source_amount
+      )
+
+      mock_quotes_api_class.assert_called_once_with(mock_api_client)
+      mock_quotes_api.update_quote.assert_called_once()
+
+      call_args = mock_quotes_api.update_quote.call_args
+      self.assertEqual(int(context["profile_id"]), call_args[0][0])  # profile_id
+      self.assertEqual(quote_id, call_args[0][1])  # quote_id
+
+      # Access the actual instance from the oneOf wrapper
+      request_obj = call_args[0][2]
       actual_request = request_obj.actual_instance
       self.assertEqual(source_currency, actual_request.source_currency)
       self.assertEqual(target_currency, actual_request.target_currency)

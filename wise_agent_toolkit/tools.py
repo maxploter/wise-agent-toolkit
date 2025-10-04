@@ -4,13 +4,13 @@ from .prompts import (
   CREATE_TRANSFER_PROMPT, CREATE_QUOTE_PROMPT, LIST_RECIPIENT_ACCOUNTS_PROMPT, CREATE_RECIPIENT_ACCOUNT_PROMPT,
   LIST_TRANSFERS_PROMPT, CANCEL_TRANSFER_PROMPT, GET_TRANSFER_BY_ID_PROMPT, LIST_PROFILES_PROMPT,
   GET_PROFILE_BY_ID_PROMPT, GET_QUOTE_BY_ID_PROMPT, DEACTIVATE_RECIPIENT_ACCOUNT_PROMPT,
-  GET_RECIPIENT_ACCOUNT_BY_ID_PROMPT,
+  GET_RECIPIENT_ACCOUNT_BY_ID_PROMPT, UPDATE_QUOTE_PROMPT,
 )
 
 from .schema import (
   CreateTransfer, CreateQuote, ListRecipientAccounts, CreateRecipientAccount, ListTransfers, CancelTransfer,
   GetTransferById, ListProfiles, GetProfileById, GetQuoteById, DeactivateRecipientAccount,
-  GetRecipientAccountById,
+  GetRecipientAccountById, UpdateQuote,
 )
 
 tools: List[Dict] = [
@@ -33,6 +33,17 @@ tools: List[Dict] = [
     "actions": {
       "quotes": {
         "create": True,
+      }
+    },
+  },
+  {
+    "method": "update_quote",
+    "name": "Update Quote",
+    "description": UPDATE_QUOTE_PROMPT,
+    "args_schema": UpdateQuote,
+    "actions": {
+      "quotes": {
+        "update": True,
       }
     },
   },

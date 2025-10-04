@@ -187,6 +187,7 @@ The library is designed to be extensible. To add support for a new AI library:
 ## Supported API Methods
 ### Quotes
 - Create a quote
+- Update a quote
 - Get quote by ID
 
 ### Recipients
