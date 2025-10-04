@@ -113,3 +113,13 @@ It takes no arguments and returns all profiles associated with the authenticated
 Returns:
     A list of profiles from Wise containing information about each profile including profile ID, type, and details.
 """
+
+GET_PROFILE_BY_ID_PROMPT = """
+This tool will get a profile by ID from Wise.
+
+It takes the following arguments:
+- profile_id (int): The ID of the profile to retrieve.
+
+Returns:
+    The profile object from Wise containing information about the profile.
+"""

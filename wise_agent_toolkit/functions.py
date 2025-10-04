@@ -344,3 +344,24 @@ def list_profiles(
 
   # Make the API call
   return profiles_api.list_profiles()
+
+
+def get_profile_by_id(
+  api_client,
+  context: Context,
+  profile_id: int,
+):
+  """
+  Get a profile by ID.
+
+  Parameters:
+      api_client: The Wise API client.
+      context (Context): The context.
+      profile_id (int): The ID of the profile to retrieve.
+
+  Returns:
+      Profile: The profile object from Wise.
+  """
+  profiles_api = wise_api_client.ProfilesApi(api_client)
+
+  return profiles_api.get_profile_by_id(profile_id)

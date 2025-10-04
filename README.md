@@ -192,3 +192,5 @@ The library is designed to be extensible. To add support for a new AI library:
 - Get transfer by ID
 - List transfers
 - Cancel a transfer
+- List profiles
+- Get profile by ID
