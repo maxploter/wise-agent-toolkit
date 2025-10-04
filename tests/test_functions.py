@@ -2,7 +2,7 @@ import unittest
 from unittest import mock
 
 from wise_agent_toolkit.functions import create_transfer, create_quote, list_recipient_accounts, \
-  create_recipient_account, list_transfers, list_profiles, get_profile_by_id
+  create_recipient_account, list_transfers, list_profiles, get_profile_by_id, get_quote_by_id
 
 
 class TestWiseFunctions(unittest.TestCase):
@@ -378,6 +378,81 @@ class TestWiseFunctions(unittest.TestCase):
       mock_profiles_api.get_profile_by_id.assert_called_once_with(profile_id)
 
       self.assertEqual(result, mock_response)
+
+  def test_get_quote_by_id(self):
+    mock_api_client = mock.Mock()
+    mock_quotes_api = mock.Mock()
+    mock_response = {
+      "id": "quote-123",
+      "sourceCurrency": "USD",
+      "targetCurrency": "EUR",
+      "sourceAmount": 100.0,
+      "targetAmount": 85.0,
+      "rate": 0.85,
+      "createdTime": "2023-10-01T12:00:00Z",
+      "guaranteedTargetAmount": True,
+      "providedAmountType": "SOURCE"
+    }
+
+    with mock.patch("wise_api_client.QuotesApi") as mock_quotes_api_class:
+      mock_quotes_api_class.return_value = mock_quotes_api
+      mock_quotes_api.get_quote_by_id.return_value = mock_response
+
+      # Test with explicit profile_id
+      context = {}
+      quote_id = "quote-123"
+      profile_id = "456"
+
+      result = get_quote_by_id(
+        api_client=mock_api_client,
+        context=context,
+        quote_id=quote_id,
+        profile_id=profile_id
+      )
+
+      mock_quotes_api_class.assert_called_once_with(mock_api_client)
+      mock_quotes_api.get_quote_by_id.assert_called_once_with(
+        profile_id=int(profile_id),
+        quote_id=quote_id
+      )
+
+      self.assertEqual(result, mock_response)
+
+      # Reset mocks for next test
+      mock_quotes_api_class.reset_mock()
+      mock_quotes_api.get_quote_by_id.reset_mock()
+
+      # Test with profile_id from context
+      context = {"profile_id": "789"}
+
+      result = get_quote_by_id(
+        api_client=mock_api_client,
+        context=context,
+        quote_id=quote_id
+      )
+
+      mock_quotes_api.get_quote_by_id.assert_called_once_with(
+        profile_id=int(context["profile_id"]),
+        quote_id=quote_id
+      )
+
+      self.assertEqual(result, mock_response)
+
+      # Reset mocks for error test
+      mock_quotes_api_class.reset_mock()
+      mock_quotes_api.get_quote_by_id.reset_mock()
+
+      # Test error when no profile_id is provided
+      context = {}
+
+      with self.assertRaises(ValueError) as cm:
+        get_quote_by_id(
+          api_client=mock_api_client,
+          context=context,
+          quote_id=quote_id
+        )
+
+      self.assertEqual(str(cm.exception), "Profile ID must be provided either as a parameter or in context.")
 
 
 if __name__ == "__main__":

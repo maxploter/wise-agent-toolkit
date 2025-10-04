@@ -3,12 +3,12 @@ from typing import Dict, List
 from .prompts import (
   CREATE_TRANSFER_PROMPT, CREATE_QUOTE_PROMPT, LIST_RECIPIENT_ACCOUNTS_PROMPT, CREATE_RECIPIENT_ACCOUNT_PROMPT,
   LIST_TRANSFERS_PROMPT, CANCEL_TRANSFER_PROMPT, GET_TRANSFER_BY_ID_PROMPT, LIST_PROFILES_PROMPT,
-  GET_PROFILE_BY_ID_PROMPT,
+  GET_PROFILE_BY_ID_PROMPT, GET_QUOTE_BY_ID_PROMPT,
 )
 
 from .schema import (
   CreateTransfer, CreateQuote, ListRecipientAccounts, CreateRecipientAccount, ListTransfers, CancelTransfer,
-  GetTransferById, ListProfiles, GetProfileById,
+  GetTransferById, ListProfiles, GetProfileById, GetQuoteById,
 )
 
 tools: List[Dict] = [
@@ -107,6 +107,17 @@ tools: List[Dict] = [
     "args_schema": GetProfileById,
     "actions": {
       "profiles": {
+        "read": True,
+      }
+    },
+  },
+  {
+    "method": "get_quote_by_id",
+    "name": "Get Quote By ID",
+    "description": GET_QUOTE_BY_ID_PROMPT,
+    "args_schema": GetQuoteById,
+    "actions": {
+      "quotes": {
         "read": True,
       }
     },

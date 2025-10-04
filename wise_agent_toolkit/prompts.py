@@ -123,3 +123,14 @@ It takes the following arguments:
 Returns:
     The profile object from Wise containing information about the profile.
 """
+
+GET_QUOTE_BY_ID_PROMPT = """
+This tool will retrieve a quote by its ID in Wise.
+
+It takes the following arguments:
+- quote_id (str): The ID of the quote to retrieve.
+- profile_id (str, optional): The profile ID. If not provided, will be taken from context.
+
+Returns:
+    The quote object from Wise containing all quote information including exchange rates, fees, and delivery times.
+"""
