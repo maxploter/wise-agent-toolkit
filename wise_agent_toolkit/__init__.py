@@ -4,7 +4,7 @@ Wise Agent Toolkit
 A library for integrating Wise APIs with various AI frameworks and libraries.
 """
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 # Core imports (always available)
 from .api import WiseAPI

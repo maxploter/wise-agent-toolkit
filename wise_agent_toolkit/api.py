@@ -9,7 +9,9 @@ from wise_api_client import ApiClient
 
 from .configuration import Context
 from .functions import (
-  create_transfer, create_quote, list_recipient_accounts, create_recipient_account, list_transfers,
+  create_transfer, create_quote, update_quote, list_recipient_accounts, create_recipient_account,
+  deactivate_recipient_account, list_transfers, cancel_transfer, get_transfer_by_id, list_profiles,
+  get_profile_by_id, get_quote_by_id, get_recipient_account_by_id,
 )
 
 
@@ -43,6 +45,12 @@ class WiseAPI(BaseModel):
         quote,
         default=str  # to_dict() does not serialize datetime objects
       )
+    elif method == "update_quote":
+      quote = update_quote(self._api_client, self._context, *args, **kwargs).to_dict()
+      return json.dumps(
+        quote,
+        default=str  # to_dict() does not serialize datetime objects
+      )
     elif method == "list_recipient_accounts":
       recipients = list_recipient_accounts(self._api_client, self._context, *args, **kwargs).to_dict()
       return json.dumps(recipients, default=str)  # to_dict() does not serialize datetime objects
@@ -52,10 +60,52 @@ class WiseAPI(BaseModel):
         recipient,
         default=str  # to_dict() does not serialize datetime objects
       )
+    elif method == "deactivate_recipient_account":
+      recipient = deactivate_recipient_account(self._api_client, self._context, *args, **kwargs).to_dict()
+      return json.dumps(
+        recipient,
+        default=str  # to_dict() does not serialize datetime objects
+      )
     elif method == "list_transfers":
       transfers = list_transfers(self._api_client, self._context, *args, **kwargs).to_dict()
       return json.dumps(
         transfers,
+        default=str  # to_dict() does not serialize datetime objects
+      )
+    elif method == "cancel_transfer":
+      transfer = cancel_transfer(self._api_client, self._context, *args, **kwargs).to_dict()
+      return json.dumps(
+        transfer,
+        default=str  # to_dict() does not serialize datetime objects
+      )
+    elif method == "get_transfer_by_id":
+      transfer = get_transfer_by_id(self._api_client, self._context, *args, **kwargs).to_dict()
+      return json.dumps(
+        transfer,
+        default=str  # to_dict() does not serialize datetime objects
+      )
+    elif method == "list_profiles":
+      profiles = list_profiles(self._api_client, self._context).to_dict()
+      return json.dumps(
+        profiles,
+        default=str  # to_dict() does not serialize datetime objects
+      )
+    elif method == "get_profile_by_id":
+      profile = get_profile_by_id(self._api_client, self._context, *args, **kwargs).to_dict()
+      return json.dumps(
+        profile,
+        default=str  # to_dict() does not serialize datetime objects
+      )
+    elif method == "get_quote_by_id":
+      quote = get_quote_by_id(self._api_client, self._context, *args, **kwargs).to_dict()
+      return json.dumps(
+        quote,
+        default=str  # to_dict() does not serialize datetime objects
+      )
+    elif method == "get_recipient_account_by_id":
+      recipient = get_recipient_account_by_id(self._api_client, self._context, *args, **kwargs).to_dict()
+      return json.dumps(
+        recipient,
         default=str  # to_dict() does not serialize datetime objects
       )
     else:
