@@ -109,12 +109,12 @@ export WISE_API_HOST="https://api.transferwise.com"  # or https://api.sandbox.tr
 **Starting the MCP Server:**
 Run the MCP server from the command line:
 ```bash
-python -m wise_agent_toolkit.mcp --api-key $WISE_API_KEY --host $WISE_API_HOST
+python -m wise_agent_toolkit.mcp --api_key $WISE_API_KEY --host $WISE_API_HOST
 ```
 
 Or with explicit values:
 ```bash
-python -m wise_agent_toolkit.mcp --api-key "your_api_key" --host "https://api.transferwise.com"
+python -m wise_agent_toolkit.mcp --api_key "your_api_key" --host "https://api.transferwise.com"
 ```
 
 **Using as an MCP Toolkit (Programmatic):**
@@ -140,9 +140,10 @@ tools = wise_agent_toolkit.get_tools()
 
 **Server Configuration:**
 The MCP server supports the following command-line options:
-- `--api-key`: Your Wise API key (required)
+- `--api_key`: Your Wise API key (required)
 - `--host`: Wise API host URL (default: sandbox)
-- `--server-name`: MCP server name (default: "wise-agent-toolkit")
+- `--server_name`: MCP server name (default: "wise-agent-toolkit")
+- `--profile_id`: Wise profile ID (optional)
 
 For production use, always use `https://api.transferwise.com` as the host.
 For testing and development, use `https://api.sandbox.transferwise.tech` (default).
