@@ -81,3 +81,16 @@ It takes the following arguments:
 Returns:
     A list of transfers from Wise containing information about each transfer.
 """
+
+CANCEL_TRANSFER_PROMPT = """
+This tool will cancel a transfer in Wise.
+
+It takes the following arguments:
+- transfer_id (int): The ID of the transfer to cancel.
+
+Returns:
+    The cancelled transfer object from Wise.
+
+Note: Only transfers in certain states can be cancelled (e.g., incoming_payment_waiting, processing). 
+Transfers that have already been sent or completed cannot be cancelled.
+"""

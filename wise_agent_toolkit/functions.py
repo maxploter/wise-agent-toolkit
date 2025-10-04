@@ -282,3 +282,24 @@ def list_transfers(
     limit=limit,
     offset=offset
   )
+
+
+def cancel_transfer(
+  api_client,
+  context: Context,
+  transfer_id: int
+):
+  """
+  Cancel a transfer.
+
+  Parameters:
+      api_client: The Wise API client.
+      context (Context): The context.
+      transfer_id (int): The ID of the transfer to cancel.
+
+  Returns:
+      The cancelled transfer object from Wise.
+  """
+  transfer_api = wise_api_client.TransfersApi(api_client)
+
+  return transfer_api.cancel_transfer(transfer_id)

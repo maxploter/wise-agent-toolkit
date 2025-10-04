@@ -2,11 +2,11 @@ from typing import Dict, List
 
 from .prompts import (
   CREATE_TRANSFER_PROMPT, CREATE_QUOTE_PROMPT, LIST_RECIPIENT_ACCOUNTS_PROMPT, CREATE_RECIPIENT_ACCOUNT_PROMPT,
-  LIST_TRANSFERS_PROMPT,
+  LIST_TRANSFERS_PROMPT, CANCEL_TRANSFER_PROMPT,
 )
 
 from .schema import (
-  CreateTransfer, CreateQuote, ListRecipientAccounts, CreateRecipientAccount, ListTransfers,
+  CreateTransfer, CreateQuote, ListRecipientAccounts, CreateRecipientAccount, ListTransfers, CancelTransfer,
 )
 
 tools: List[Dict] = [
@@ -62,6 +62,17 @@ tools: List[Dict] = [
     "actions": {
       "transfers": {
         "read": True,
+      }
+    },
+  },
+  {
+    "method": "cancel_transfer",
+    "name": "Cancel Transfer",
+    "description": CANCEL_TRANSFER_PROMPT,
+    "args_schema": CancelTransfer,
+    "actions": {
+      "transfers": {
+        "update": True,
       }
     },
   },

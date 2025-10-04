@@ -190,3 +190,4 @@ The library is designed to be extensible. To add support for a new AI library:
 - Create recipient account
 - Create a transfer
 - List transfers
+- Cancel a transfer
