@@ -68,6 +68,8 @@ class WiseAPI(BaseModel):
       )
     elif method == "list_transfers":
       transfers = list_transfers(self._api_client, self._context, *args, **kwargs).to_dict()
+      transfers = [] if transfers is None else transfers
+      transfers = [t.to_dict() for t in transfers]
       return json.dumps(
         transfers,
         default=str  # to_dict() does not serialize datetime objects
@@ -85,7 +87,9 @@ class WiseAPI(BaseModel):
         default=str  # to_dict() does not serialize datetime objects
       )
     elif method == "list_profiles":
-      profiles = list_profiles(self._api_client, self._context).to_dict()
+      profiles = list_profiles(self._api_client, self._context)
+      profiles = [] if profiles is None else profiles
+      profiles = [p.to_dict() for p in profiles]
       return json.dumps(
         profiles,
         default=str  # to_dict() does not serialize datetime objects
