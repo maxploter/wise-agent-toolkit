@@ -209,7 +209,7 @@ def update_quote(
   create_authenticated_quote_request = wise_api_client.CreateAuthenticatedQuoteRequest(r)
   # Note: The Wise API client might use the same request structure for updates as creates
   # This follows the pattern where PATCH operations reuse creation request models
-  return quotes_api.create_authenticated_quote(int(profile_id), create_authenticated_quote_request)
+  return quotes_api.update_quote(int(profile_id), create_authenticated_quote_request)
 
 
 def create_recipient_account(
