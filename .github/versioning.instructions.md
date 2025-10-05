@@ -6,7 +6,70 @@ This document provides step-by-step instructions for updating the `wise-api-clie
 
 ## Version Update & Publishing Workflow
 
-### Step 1: Check for Latest wise-api-client Version
+### Step 1: Prepare Git Branch
+
+Before making any changes, ensure you're working on a clean branch:
+
+```bash
+# Checkout to main branch
+git checkout main
+
+# Pull latest changes
+git pull origin main
+
+# Get current version from pyproject.toml
+CURRENT_VERSION=$(grep "^version = " pyproject.toml | sed 's/version = "\(.*\)"/\1/')
+echo "Current version: $CURRENT_VERSION"
+
+# Automatically determine next version based on semantic versioning
+# Parse version components
+IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
+
+# Default to patch bump (most common for dependency updates)
+NEXT_VERSION="${MAJOR}.${MINOR}.$((PATCH + 1))"
+
+echo "Proposed next version: $NEXT_VERSION (patch bump)"
+echo ""
+echo "Version bump types:"
+echo "  1) Patch (${MAJOR}.${MINOR}.$((PATCH + 1))) - Bug fixes, dependency updates"
+echo "  2) Minor (${MAJOR}.$((MINOR + 1)).0) - New features, backward-compatible changes"
+echo "  3) Major ($((MAJOR + 1)).0.0) - Breaking changes"
+echo "  4) Custom - Specify your own version"
+echo ""
+read -p "Select version bump type [1-4] (default: 1): " BUMP_TYPE
+BUMP_TYPE=${BUMP_TYPE:-1}
+
+case $BUMP_TYPE in
+    1)
+        NEXT_VERSION="${MAJOR}.${MINOR}.$((PATCH + 1))"
+        ;;
+    2)
+        NEXT_VERSION="${MAJOR}.$((MINOR + 1)).0"
+        ;;
+    3)
+        NEXT_VERSION="$((MAJOR + 1)).0.0"
+        ;;
+    4)
+        read -p "Enter custom version: " NEXT_VERSION
+        ;;
+    *)
+        echo "Invalid selection, using patch bump"
+        NEXT_VERSION="${MAJOR}.${MINOR}.$((PATCH + 1))"
+        ;;
+esac
+
+echo "Using version: $NEXT_VERSION"
+
+# Create and checkout new branch
+git checkout -b "bump-from-${CURRENT_VERSION}-to-${NEXT_VERSION}"
+echo "Created and switched to branch: bump-from-${CURRENT_VERSION}-to-${NEXT_VERSION}"
+```
+
+**Branch Naming Convention:**
+- Format: `bump-from-{current-version}-to-{next-version}`
+- Example: `bump-from-0.3.0-to-0.3.1`
+
+### Step 2: Check for Latest wise-api-client Version
 
 Before updating, verify the latest version of `wise-api-client` available on PyPI:
 
@@ -23,7 +86,7 @@ pip search wise-api-client 2>/dev/null || curl -s https://pypi.org/pypi/wise-api
 **Alternative method (recommended):**
 Visit https://pypi.org/project/wise-api-client/ to see the latest version.
 
-### Step 2: Update pyproject.toml
+### Step 3: Update pyproject.toml
 
 Update the `wise-api-client` version in the dependencies section:
 
@@ -46,7 +109,7 @@ dependencies = [
 - **Minor version** (0.2.4 → 0.3.0): New features, new API methods, backward-compatible changes
 - **Major version** (0.2.4 → 1.0.0): Breaking changes, major API overhauls
 
-### Step 3: Update requirements.txt
+### Step 4: Update requirements.txt
 
 Update the pinned version in `requirements.txt`:
 
@@ -57,7 +120,7 @@ wise-api-client=={NEW_API_CLIENT_VERSION}
 pydantic>=2.10
 ```
 
-### Step 4: Update Version References in Documentation
+### Step 5: Update Version References in Documentation
 
 Check and update version references in:
 
@@ -65,7 +128,7 @@ Check and update version references in:
 2. **CHANGELOG.md** (if exists): Add entry for the new version
 3. **Documentation**: Update any hardcoded version references
 
-### Step 5: Clean Build Artifacts
+### Step 6: Clean Build Artifacts
 
 Remove old build artifacts before creating a new distribution:
 
@@ -83,7 +146,7 @@ find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
 find . -type f -name "*.pyc" -delete
 ```
 
-### Step 6: Run Tests
+### Step 7: Run Tests
 
 Always run tests before publishing to ensure nothing is broken:
 
@@ -98,7 +161,7 @@ python -m unittest tests/test_configuration.py
 
 **Important:** Fix any failing tests before proceeding to publish.
 
-### Step 7: Build the Distribution
+### Step 8: Build the Distribution
 
 Create both wheel and source distribution:
 
@@ -115,7 +178,7 @@ This will create:
 ls -lh dist/
 ```
 
-### Step 8: Test the Build Locally (Optional but Recommended)
+### Step 9: Test the Build Locally (Optional but Recommended)
 
 Before publishing to PyPI, test the package installation locally:
 
@@ -135,7 +198,7 @@ deactivate
 rm -rf test_env
 ```
 
-### Step 9: Publish to PyPI
+### Step 10: Publish to PyPI
 
 Upload the distribution to PyPI using twine:
 
@@ -156,7 +219,7 @@ twine upload --repository testpypi dist/*
 pip install --index-url https://test.pypi.org/simple/ wise-agent-toolkit
 ```
 
-### Step 10: Verify Publication
+### Step 11: Verify Publication
 
 After publishing, verify the package is available:
 
@@ -171,7 +234,7 @@ pip install --upgrade wise-agent-toolkit
 python -c "import wise_agent_toolkit; print(wise_agent_toolkit.__version__ if hasattr(wise_agent_toolkit, '__version__') else 'Version check not implemented')"
 ```
 
-### Step 11: Create Git Tag and Release
+### Step 12: Create Git Tag and Release
 
 After successful publication:
 
@@ -380,4 +443,3 @@ When updating versions:
 6. Document all changes in commit messages
 
 Remember: Once published to PyPI, versions cannot be deleted or overwritten. Always test thoroughly before publishing!
-
