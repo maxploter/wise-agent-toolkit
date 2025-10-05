@@ -1,2 +1,2 @@
-wise-api-client==0.2.4
+wise-api-client==0.2.5
 pydantic>=2.10
