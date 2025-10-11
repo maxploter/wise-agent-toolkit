@@ -99,13 +99,13 @@ This tool will list transfers in Wise.
 
 It takes the following arguments:
 - profile (int, optional): The profile ID to list transfers for. If not provided, will be taken from context.
-- status (str, optional): Filter transfers by status (e.g., incoming_payment_waiting, processing, sent, cancelled).
+- status (str, optional): Filter transfers by status (e.g., incoming_payment_waiting, processing, outgoing_payment_sent, cancelled).
 - source_currency (str, optional): Filter transfers by source currency (3-letter ISO currency code).
 - target_currency (str, optional): Filter transfers by target currency (3-letter ISO currency code).
-- created_date_start (datetime, optional): Filter transfers created after this date.
-- created_date_end (datetime, optional): Filter transfers created before this date.
-- limit (int, optional): Number of items per page for pagination (default 20).
-- offset (int, optional): Offset for pagination (default 0).
+- created_date_start (date, optional): Filter transfers created after this date.
+- created_date_end (date, optional): Filter transfers created before this date.
+- limit (int, optional): Number of items per page for pagination (default 20, max 40).
+- offset (int, optional): Offset for pagination (default 0). This is a row count offset (e.g., offset=100 skips the first 100 transfers), NOT a transfer ID.
 
 Returns:
     A list of transfers from Wise containing information about each transfer.
