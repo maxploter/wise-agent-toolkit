@@ -164,7 +164,7 @@ tools: List[Dict] = [
     "description": GET_ACCOUNT_REQUIREMENTS_PROMPT,
     "args_schema": GetAccountRequirements,
     "actions": {
-      "accounts": {
+      "recipients": {
         "read": True,
       }
     },

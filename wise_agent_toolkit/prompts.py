@@ -102,10 +102,15 @@ It takes the following arguments:
 - status (str, optional): Filter transfers by status (e.g., incoming_payment_waiting, processing, outgoing_payment_sent, cancelled).
 - source_currency (str, optional): Filter transfers by source currency (3-letter ISO currency code).
 - target_currency (str, optional): Filter transfers by target currency (3-letter ISO currency code).
-- created_date_start (date, optional): Filter transfers created after this date.
-- created_date_end (date, optional): Filter transfers created before this date.
+- created_date_start (date, optional): Filter transfers created on or after this date. Format: YYYY-MM-DD (e.g., 2025-09-01).
+- created_date_end (date, optional): Filter transfers created before this date. Format: YYYY-MM-DD (e.g., 2025-10-01).
 - limit (int, optional): Number of items per page for pagination (default 20, max 40).
 - offset (int, optional): Offset for pagination (default 0). This is a row count offset (e.g., offset=100 skips the first 100 transfers), NOT a transfer ID.
+
+Pagination Example:
+- First page: offset=0, limit=20 (returns transfers 1-20)
+- Second page: offset=20, limit=20 (returns transfers 21-40)
+- Third page: offset=40, limit=20 (returns transfers 41-60)
 
 Returns:
     A list of transfers from Wise containing information about each transfer.
