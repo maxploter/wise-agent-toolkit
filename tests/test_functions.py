@@ -4,7 +4,7 @@ from unittest import mock
 from wise_agent_toolkit.functions import create_transfer, create_quote, update_quote, list_recipient_accounts, \
   create_recipient_account, deactivate_recipient_account, list_transfers, list_profiles, get_profile_by_id, \
   get_quote_by_id, \
-  get_recipient_account_by_id, get_account_requirements
+  get_recipient_account_by_id, get_account_requirements, list_activities
 
 
 class TestWiseFunctions(unittest.TestCase):
@@ -658,6 +658,104 @@ class TestWiseFunctions(unittest.TestCase):
       )
 
       self.assertEqual(result, mock_response)
+
+  def test_list_activities(self):
+    mock_api_client = mock.Mock()
+    mock_activities_api = mock.Mock()
+    mock_response = [
+      {
+        "id": "activity-123",
+        "status": "COMPLETED",
+        "type": "TRANSFER",
+        "createdAt": "2023-10-01T12:00:00Z",
+        "details": {
+          "transferId": 12345,
+          "amount": 100.0,
+          "currency": "USD"
+        }
+      },
+      {
+        "id": "activity-456",
+        "status": "PENDING",
+        "type": "BALANCE_ADJUSTMENT",
+        "createdAt": "2023-10-02T15:30:00Z",
+        "details": {
+          "amount": 50.0,
+          "currency": "EUR"
+        }
+      }
+    ]
+
+    with mock.patch("wise_api_client.ActivitiesApi") as mock_activities_api_class:
+      mock_activities_api_class.return_value = mock_activities_api
+      mock_activities_api.list_activities.return_value = mock_response
+
+      # Test with explicit profile_id parameter
+      context = {}
+      profile_id = 456
+      status = "COMPLETED"
+      limit = 10
+      offset = 0
+
+      result = list_activities(
+        api_client=mock_api_client,
+        context=context,
+        profile_id=profile_id,
+        status=status,
+        limit=limit,
+        offset=offset
+      )
+
+      mock_activities_api_class.assert_called_once_with(mock_api_client)
+      mock_activities_api.list_activities.assert_called_once_with(
+        profile_id=profile_id,
+        status=status,
+        created_date_start=None,
+        created_date_end=None,
+        limit=limit,
+        offset=offset
+      )
+
+      self.assertEqual(result, mock_response)
+
+      # Reset mocks for next test
+      mock_activities_api_class.reset_mock()
+      mock_activities_api.list_activities.reset_mock()
+
+      # Test with profile_id from context
+      context = {"profile_id": "789"}
+
+      result = list_activities(
+        api_client=mock_api_client,
+        context=context,
+        status="PENDING"
+      )
+
+      mock_activities_api.list_activities.assert_called_once_with(
+        profile_id=int(context["profile_id"]),
+        status="PENDING",
+        created_date_start=None,
+        created_date_end=None,
+        limit=None,
+        offset=None
+      )
+
+      self.assertEqual(result, mock_response)
+
+      # Reset mocks for error test
+      mock_activities_api_class.reset_mock()
+      mock_activities_api.list_activities.reset_mock()
+
+      # Test error when no profile_id is provided
+      context = {}
+
+      with self.assertRaises(ValueError) as cm:
+        list_activities(
+          api_client=mock_api_client,
+          context=context
+        )
+
+      self.assertEqual(str(cm.exception), "Profile ID must be provided either as a parameter or in context.")
 
 
 if __name__ == "__main__":

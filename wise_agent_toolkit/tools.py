@@ -5,12 +5,13 @@ from .prompts import (
   LIST_TRANSFERS_PROMPT, CANCEL_TRANSFER_PROMPT, GET_TRANSFER_BY_ID_PROMPT, LIST_PROFILES_PROMPT,
   GET_PROFILE_BY_ID_PROMPT, GET_QUOTE_BY_ID_PROMPT, DEACTIVATE_RECIPIENT_ACCOUNT_PROMPT,
   GET_RECIPIENT_ACCOUNT_BY_ID_PROMPT, UPDATE_QUOTE_PROMPT, GET_ACCOUNT_REQUIREMENTS_PROMPT,
+  LIST_ACTIVITIES_PROMPT,
 )
 
 from .schema import (
   CreateTransfer, CreateQuote, ListRecipientAccounts, CreateRecipientAccount, ListTransfers, CancelTransfer,
   GetTransferById, ListProfiles, GetProfileById, GetQuoteById, DeactivateRecipientAccount,
-  GetRecipientAccountById, UpdateQuote, GetAccountRequirements,
+  GetRecipientAccountById, UpdateQuote, GetAccountRequirements, ListActivities,
 )
 
 tools: List[Dict] = [
@@ -164,6 +165,17 @@ tools: List[Dict] = [
     "args_schema": GetAccountRequirements,
     "actions": {
       "accounts": {
+        "read": True,
+      }
+    },
+  },
+  {
+    "method": "list_activities",
+    "name": "List Activities",
+    "description": LIST_ACTIVITIES_PROMPT,
+    "args_schema": ListActivities,
+    "actions": {
+      "activities": {
         "read": True,
       }
     },
