@@ -23,7 +23,7 @@ classifiers = [
 
 # Core dependencies (always installed)
 dependencies = [
-    "wise-api-client>=0.3.0",
+    "wise-api-client>=0.4.0",
     "pydantic>=2.10",
 ]
 
