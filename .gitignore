@@ -172,3 +172,7 @@ cython_debug/
 
 # JetBrains
 .idea/
+
+# macOS
+#  General
+.DS_Store
