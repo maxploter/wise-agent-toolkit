@@ -11,7 +11,7 @@ from .configuration import Context
 from .functions import (
   create_transfer, create_quote, update_quote, list_recipient_accounts, create_recipient_account,
   deactivate_recipient_account, list_transfers, cancel_transfer, get_transfer_by_id, list_profiles,
-  get_profile_by_id, get_quote_by_id, get_recipient_account_by_id,
+  get_profile_by_id, get_quote_by_id, get_recipient_account_by_id, list_activities, get_account_requirements,
 )
 
 
@@ -112,5 +112,16 @@ class WiseAPI(BaseModel):
         recipient,
         default=str  # to_dict() does not serialize datetime objects
       )
+    elif method == "get_account_requirements":
+      requirements = get_account_requirements(self._api_client, self._context, *args, **kwargs)
+      requirements = [] if requirements is None else requirements
+      requirements = [r.to_dict() for r in requirements]
+      return json.dumps(
+        requirements,
+        default=str  # to_dict() does not serialize datetime objects
+      )
+    elif method == "list_activities":
+      activities = list_activities(self._api_client, self._context, *args, **kwargs).to_dict()
+      return json.dumps(activities, default=str)  # to_dict() does not serialize datetime objects
     else:
       raise ValueError("Invalid method " + method)

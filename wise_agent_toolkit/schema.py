@@ -323,3 +323,37 @@ class GetAccountRequirements(BaseModel):
     None,
     description="Whether address is required for the recipient.",
   )
+
+
+class ListActivities(BaseModel):
+  """Schema for the ``list_activities`` operation."""
+
+  profile_id: Optional[int] = Field(
+    None,
+    description="The profile ID to list activities for. If not provided, will be taken from context.",
+  )
+
+  status: Optional[str] = Field(
+    None,
+    description="Filter activities by status.",
+  )
+
+  created_date_start: Optional[datetime] = Field(
+    None,
+    description="Filter activities created after this date.",
+  )
+
+  created_date_end: Optional[datetime] = Field(
+    None,
+    description="Filter activities created before this date.",
+  )
+
+  limit: Optional[int] = Field(
+    None,
+    description="Number of items per page for pagination (default 20).",
+  )
+
+  offset: Optional[int] = Field(
+    None,
+    description="Offset for pagination (default 0).",
+  )

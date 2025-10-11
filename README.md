@@ -206,3 +206,6 @@ The library is designed to be extensible. To add support for a new AI library:
 ### Profiles
 - List profiles
 - Get profile by ID
+
+### Activities
+- List activities

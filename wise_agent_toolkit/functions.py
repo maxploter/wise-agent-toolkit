@@ -539,3 +539,50 @@ def get_account_requirements(
     accept_minor_version=1,
     address_required=address_required
   )
+
+
+def list_activities(
+  api_client,
+  context: Context,
+  profile_id: Optional[int] = None,
+  status: Optional[str] = None,
+  created_date_start: Optional[datetime] = None,
+  created_date_end: Optional[datetime] = None,
+  limit: Optional[int] = None,
+  offset: Optional[int] = None,
+):
+  """
+  List activities for a profile.
+
+  Parameters:
+      api_client: The Wise API client.
+      context (Context): The context.
+      profile_id (int, optional): The profile ID. If not provided, will be taken from context.
+      status (str, optional): Filter by activity status.
+      created_date_start (datetime, optional): Filter activities created after this date.
+      created_date_end (datetime, optional): Filter activities created before this date.
+      limit (int, optional): Number of items per page (default 20).
+      offset (int, optional): Offset for pagination (default 0).
+
+  Returns:
+      List of activities from Wise.
+  """
+  activities_api = wise_api_client.ActivitiesApi(api_client)
+
+  # Get profile ID from context if not provided
+  if not profile_id:
+    profile_id = context.get("profile_id")
+    if not profile_id:
+      raise ValueError("Profile ID must be provided either as a parameter or in context.")
+    profile_id = int(profile_id)
+
+  # Make the API call
+  return activities_api.list_activities(
+    profile_id=profile_id,
+    status=status,
+    created_date_start=created_date_start,
+    created_date_end=created_date_end,
+    limit=limit,
+    offset=offset
+  )
+
