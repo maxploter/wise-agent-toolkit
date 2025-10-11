@@ -343,14 +343,14 @@ class ListActivities(BaseModel):
     description="Filter by activity status.",
   )
 
-  since: Optional[datetime] = Field(
+  since: Optional[str] = Field(
     None,
-    description="Filter activities created after this timestamp.",
+    description="Filter activities created after this timestamp (ISO 8601 format with milliseconds, e.g., '2025-09-11T15:01:21.886Z').",
   )
 
-  until: Optional[datetime] = Field(
+  until: Optional[str] = Field(
     None,
-    description="Filter activities created before this timestamp.",
+    description="Filter activities created before this timestamp (ISO 8601 format with milliseconds, e.g., '2025-09-11T15:01:21.886Z').",
   )
 
   next_cursor: Optional[str] = Field(

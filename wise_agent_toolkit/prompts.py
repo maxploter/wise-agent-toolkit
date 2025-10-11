@@ -198,8 +198,8 @@ It takes the following arguments:
 - profile_id (int, optional): The profile ID to list activities for. If not provided, will be taken from context.
 - monetary_resource_type (str, optional): Filter by resource type.
 - status (str, optional): Filter by activity status.
-- since (datetime, optional): Filter activities created after this timestamp.
-- until (datetime, optional): Filter activities created before this timestamp.
+- since (str, optional): Filter activities created after this timestamp (ISO 8601 format with milliseconds, e.g., '2025-09-01T15:01:21.886Z').
+- until (str, optional): Filter activities created before this timestamp (ISO 8601 format with milliseconds, e.g., '2025-09-17T15:01:21.886Z').
 - next_cursor (str, optional): Pagination cursor for next page.
 - size (int, optional): Number of results per page (default 10).
 
