@@ -8,6 +8,7 @@ Object = Literal[
   "quotes",
   "recipients",
   "balances",
+  "activities",
 ]
 
 

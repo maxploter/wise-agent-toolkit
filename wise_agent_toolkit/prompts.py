@@ -43,11 +43,12 @@ It takes the following arguments:
 - target_currency (str, optional): The target currency code (3-letter ISO currency code).
 - source_amount (float, optional): The amount in the source currency to be converted.
 - target_amount (float, optional): The amount in the target currency to receive.
-  Note: Provide either source_amount or target_amount, not both.
 - target_account (int, optional): A unique recipient account identifier.
 - profile_id (str, optional): The profile ID. If not provided, will be taken from context.
 - pay_out (str, optional): The pay out method.
 - preferred_pay_in (str, optional): The preferred pay in method.
+
+Note: All parameters except quote_id are optional. You can update any combination of fields.
 
 Returns:
     The updated quote object from Wise.
@@ -102,10 +103,15 @@ It takes the following arguments:
 - status (str, optional): Filter transfers by status (e.g., incoming_payment_waiting, processing, outgoing_payment_sent, cancelled).
 - source_currency (str, optional): Filter transfers by source currency (3-letter ISO currency code).
 - target_currency (str, optional): Filter transfers by target currency (3-letter ISO currency code).
-- created_date_start (date, optional): Filter transfers created after this date.
-- created_date_end (date, optional): Filter transfers created before this date.
+- created_date_start (date, optional): Filter transfers created on or after this date. Format: YYYY-MM-DD (e.g., 2025-09-01).
+- created_date_end (date, optional): Filter transfers created before this date. Format: YYYY-MM-DD (e.g., 2025-10-01).
 - limit (int, optional): Number of items per page for pagination (default 20, max 40).
 - offset (int, optional): Offset for pagination (default 0). This is a row count offset (e.g., offset=100 skips the first 100 transfers), NOT a transfer ID.
+
+Pagination Example:
+- First page: offset=0, limit=20 (returns transfers 1-20)
+- Second page: offset=20, limit=20 (returns transfers 21-40)
+- Third page: offset=40, limit=20 (returns transfers 41-60)
 
 Returns:
     A list of transfers from Wise containing information about each transfer.
@@ -190,11 +196,12 @@ This tool will list activities for a profile in Wise.
 
 It takes the following arguments:
 - profile_id (int, optional): The profile ID to list activities for. If not provided, will be taken from context.
-- status (str, optional): Filter activities by status.
-- created_date_start (datetime, optional): Filter activities created after this date.
-- created_date_end (datetime, optional): Filter activities created before this date.
-- limit (int, optional): Number of items per page for pagination (default 20).
-- offset (int, optional): Offset for pagination (default 0).
+- monetary_resource_type (str, optional): Filter by resource type.
+- status (str, optional): Filter by activity status.
+- since (datetime, optional): Filter activities created after this timestamp.
+- until (datetime, optional): Filter activities created before this timestamp.
+- next_cursor (str, optional): Pagination cursor for next page.
+- size (int, optional): Number of results per page (default 10).
 
 Returns:
     A list of activities from Wise containing information about each activity.

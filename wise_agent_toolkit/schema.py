@@ -104,24 +104,24 @@ class UpdateQuote(BaseModel):
     description="The ID of the quote to update.",
   )
 
-  source_currency: str = Field(
-    ...,
+  source_currency: Optional[str] = Field(
+    None,
     description="The source currency code (3-letter ISO currency code).",
   )
 
-  target_currency: str = Field(
-    ...,
+  target_currency: Optional[str] = Field(
+    None,
     description="The target currency code (3-letter ISO currency code).",
   )
 
   source_amount: Optional[float] = Field(
     None,
-    description="The amount in the source currency to be converted. Provide either source_amount or target_amount, not both.",
+    description="The amount in the source currency to be converted.",
   )
 
   target_amount: Optional[float] = Field(
     None,
-    description="The amount in the target currency to receive. Provide either source_amount or target_amount, not both.",
+    description="The amount in the target currency to receive.",
   )
 
   target_account: Optional[int] = Field(
@@ -333,27 +333,32 @@ class ListActivities(BaseModel):
     description="The profile ID to list activities for. If not provided, will be taken from context.",
   )
 
+  monetary_resource_type: Optional[str] = Field(
+    None,
+    description="Filter by resource type.",
+  )
+
   status: Optional[str] = Field(
     None,
-    description="Filter activities by status.",
+    description="Filter by activity status.",
   )
 
-  created_date_start: Optional[datetime] = Field(
+  since: Optional[datetime] = Field(
     None,
-    description="Filter activities created after this date.",
+    description="Filter activities created after this timestamp.",
   )
 
-  created_date_end: Optional[datetime] = Field(
+  until: Optional[datetime] = Field(
     None,
-    description="Filter activities created before this date.",
+    description="Filter activities created before this timestamp.",
   )
 
-  limit: Optional[int] = Field(
+  next_cursor: Optional[str] = Field(
     None,
-    description="Number of items per page for pagination (default 20).",
+    description="Pagination cursor for next page.",
   )
 
-  offset: Optional[int] = Field(
+  size: Optional[int] = Field(
     None,
-    description="Offset for pagination (default 0).",
+    description="Number of results per page (default 10).",
   )

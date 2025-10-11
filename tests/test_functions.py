@@ -694,26 +694,29 @@ class TestWiseFunctions(unittest.TestCase):
       context = {}
       profile_id = 456
       status = "COMPLETED"
-      limit = 10
-      offset = 0
+      monetary_resource_type = "TRANSFER"
+      size = 10
+      next_cursor = "cursor123"
 
       result = list_activities(
         api_client=mock_api_client,
         context=context,
         profile_id=profile_id,
         status=status,
-        limit=limit,
-        offset=offset
+        monetary_resource_type=monetary_resource_type,
+        size=size,
+        next_cursor=next_cursor
       )
 
       mock_activities_api_class.assert_called_once_with(mock_api_client)
       mock_activities_api.list_activities.assert_called_once_with(
         profile_id=profile_id,
+        monetary_resource_type=monetary_resource_type,
         status=status,
-        created_date_start=None,
-        created_date_end=None,
-        limit=limit,
-        offset=offset
+        since=None,
+        until=None,
+        next_cursor=next_cursor,
+        size=size
       )
 
       self.assertEqual(result, mock_response)
@@ -733,11 +736,12 @@ class TestWiseFunctions(unittest.TestCase):
 
       mock_activities_api.list_activities.assert_called_once_with(
         profile_id=int(context["profile_id"]),
+        monetary_resource_type=None,
         status="PENDING",
-        created_date_start=None,
-        created_date_end=None,
-        limit=None,
-        offset=None
+        since=None,
+        until=None,
+        next_cursor=None,
+        size=None
       )
 
       self.assertEqual(result, mock_response)

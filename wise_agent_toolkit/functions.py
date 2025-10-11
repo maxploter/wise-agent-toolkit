@@ -141,8 +141,8 @@ def update_quote(
   api_client,
   context: Context,
   quote_id: str,
-  source_currency: str,
-  target_currency: str,
+  source_currency: Optional[str] = None,
+  target_currency: Optional[str] = None,
   source_amount: Optional[float] = None,
   target_amount: Optional[float] = None,
   target_account: Optional[int] = None,
@@ -157,12 +157,12 @@ def update_quote(
       api_client: The Wise API client.
       context (Context): The context.
       quote_id (str): The ID of the quote to update.
-      source_currency (str): ISO 4217 three-letter currency code for source.
-      target_currency (str): ISO 4217 three-letter currency code for target.
+      source_currency (str, optional): ISO 4217 three-letter currency code for source.
+      target_currency (str, optional): ISO 4217 three-letter currency code for target.
       source_amount (float, optional): The amount in the source currency. Must be greater than 0.
       target_amount (float, optional): The amount in the target currency. Must be greater than 0.
       target_account (int, optional): A unique recipient account identifier.
-      pay_out (str, optional): Preferred payout method. Default is BANK_TRANSFER.
+      pay_out (str, optional): Preferred payout method.
       preferred_pay_in (str, optional): Preferred payin method.
       profile_id (str, optional): The profile ID. If not provided, will be taken from context.
 
@@ -177,39 +177,17 @@ def update_quote(
     if not profile_id:
       raise ValueError("Profile ID must be provided either as a parameter or in context.")
 
-  # Either source_amount or target_amount should be provided, but not both
-  if source_amount is not None and target_amount is not None:
-    raise ValueError("Please provide either source_amount or target_amount, not both.")
-  elif source_amount is None and target_amount is None:
-    raise ValueError("Either source_amount or target_amount must be provided.")
+  # Build update quote request - all fields are optional for updates
+  update_quote_request = wise_api_client.UpdateQuoteRequest(
+    source_currency=source_currency,
+    target_currency=target_currency,
+    source_amount=source_amount,
+    target_amount=target_amount,
+    target_account=target_account,
+    pay_out=pay_out
+  )
 
-  # Build quote request data
-  quote_request_data = {
-    "source_currency": source_currency,
-    "target_currency": target_currency,
-  }
-
-  # Add optional fields
-  if target_account is not None:
-    quote_request_data["target_account"] = target_account
-
-  if pay_out is not None:
-    quote_request_data["pay_out"] = pay_out
-
-  if preferred_pay_in is not None:
-    quote_request_data["preferred_pay_in"] = preferred_pay_in
-
-  if source_amount is not None:
-    quote_request_data["source_amount"] = source_amount
-    r = wise_api_client.CreateAuthenticatedSourceAmountQuoteRequest(**quote_request_data)
-  else:
-    quote_request_data["target_amount"] = target_amount
-    r = wise_api_client.CreateAuthenticatedTargetAmountQuoteRequest(**quote_request_data)
-
-  create_authenticated_quote_request = wise_api_client.CreateAuthenticatedQuoteRequest(r)
-  # Note: The Wise API client might use the same request structure for updates as creates
-  # This follows the pattern where PATCH operations reuse creation request models
-  return quotes_api.update_quote(int(profile_id), create_authenticated_quote_request)
+  return quotes_api.update_quote(int(profile_id), quote_id, update_quote_request)
 
 
 def create_recipient_account(
@@ -545,11 +523,12 @@ def list_activities(
   api_client,
   context: Context,
   profile_id: Optional[int] = None,
+  monetary_resource_type: Optional[str] = None,
   status: Optional[str] = None,
-  created_date_start: Optional[datetime] = None,
-  created_date_end: Optional[datetime] = None,
-  limit: Optional[int] = None,
-  offset: Optional[int] = None,
+  since: Optional[datetime] = None,
+  until: Optional[datetime] = None,
+  next_cursor: Optional[str] = None,
+  size: Optional[int] = None,
 ):
   """
   List activities for a profile.
@@ -558,14 +537,15 @@ def list_activities(
       api_client: The Wise API client.
       context (Context): The context.
       profile_id (int, optional): The profile ID. If not provided, will be taken from context.
+      monetary_resource_type (str, optional): Filter by resource type.
       status (str, optional): Filter by activity status.
-      created_date_start (datetime, optional): Filter activities created after this date.
-      created_date_end (datetime, optional): Filter activities created before this date.
-      limit (int, optional): Number of items per page (default 20).
-      offset (int, optional): Offset for pagination (default 0).
+      since (datetime, optional): Filter activities created after this timestamp.
+      until (datetime, optional): Filter activities created before this timestamp.
+      next_cursor (str, optional): Pagination cursor for next page.
+      size (int, optional): Number of results per page (default 10).
 
   Returns:
-      List of activities from Wise.
+      ActivitiesResponse: Activities response from Wise.
   """
   activities_api = wise_api_client.ActivitiesApi(api_client)
 
@@ -579,10 +559,10 @@ def list_activities(
   # Make the API call
   return activities_api.list_activities(
     profile_id=profile_id,
+    monetary_resource_type=monetary_resource_type,
     status=status,
-    created_date_start=created_date_start,
-    created_date_end=created_date_end,
-    limit=limit,
-    offset=offset
+    since=since,
+    until=until,
+    next_cursor=next_cursor,
+    size=size
   )
-
