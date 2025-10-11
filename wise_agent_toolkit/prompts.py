@@ -39,8 +39,8 @@ This tool will update an existing quote for currency conversion in Wise.
 
 It takes the following arguments:
 - quote_id (str): The ID of the quote to update.
-- source_currency (str): The source currency code (3-letter ISO currency code).
-- target_currency (str): The target currency code (3-letter ISO currency code).
+- source_currency (str, optional): The source currency code (3-letter ISO currency code).
+- target_currency (str, optional): The target currency code (3-letter ISO currency code).
 - source_amount (float, optional): The amount in the source currency to be converted.
 - target_amount (float, optional): The amount in the target currency to receive.
   Note: Provide either source_amount or target_amount, not both.
