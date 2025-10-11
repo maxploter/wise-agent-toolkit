@@ -104,24 +104,24 @@ class UpdateQuote(BaseModel):
     description="The ID of the quote to update.",
   )
 
-  source_currency: str = Field(
-    ...,
+  source_currency: Optional[str] = Field(
+    None,
     description="The source currency code (3-letter ISO currency code).",
   )
 
-  target_currency: str = Field(
-    ...,
+  target_currency: Optional[str] = Field(
+    None,
     description="The target currency code (3-letter ISO currency code).",
   )
 
   source_amount: Optional[float] = Field(
     None,
-    description="The amount in the source currency to be converted. Provide either source_amount or target_amount, not both.",
+    description="The amount in the source currency to be converted.",
   )
 
   target_amount: Optional[float] = Field(
     None,
-    description="The amount in the target currency to receive. Provide either source_amount or target_amount, not both.",
+    description="The amount in the target currency to receive.",
   )
 
   target_account: Optional[int] = Field(
