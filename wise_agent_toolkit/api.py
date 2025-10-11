@@ -112,6 +112,14 @@ class WiseAPI(BaseModel):
         recipient,
         default=str  # to_dict() does not serialize datetime objects
       )
+    elif method == "get_account_requirements":
+      requirements = get_account_requirements(self._api_client, self._context, *args, **kwargs)
+      requirements = [] if requirements is None else requirements
+      requirements = [r.to_dict() for r in requirements]
+      return json.dumps(
+        requirements,
+        default=str  # to_dict() does not serialize datetime objects
+      )
     elif method == "list_activities":
       activities = list_activities(self._api_client, self._context, *args, **kwargs).to_dict()
       return json.dumps(activities, default=str)  # to_dict() does not serialize datetime objects
