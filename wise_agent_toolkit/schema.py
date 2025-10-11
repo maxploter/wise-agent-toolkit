@@ -333,27 +333,32 @@ class ListActivities(BaseModel):
     description="The profile ID to list activities for. If not provided, will be taken from context.",
   )
 
+  monetary_resource_type: Optional[str] = Field(
+    None,
+    description="Filter by resource type.",
+  )
+
   status: Optional[str] = Field(
     None,
-    description="Filter activities by status.",
+    description="Filter by activity status.",
   )
 
-  created_date_start: Optional[datetime] = Field(
+  since: Optional[datetime] = Field(
     None,
-    description="Filter activities created after this date.",
+    description="Filter activities created after this timestamp.",
   )
 
-  created_date_end: Optional[datetime] = Field(
+  until: Optional[datetime] = Field(
     None,
-    description="Filter activities created before this date.",
+    description="Filter activities created before this timestamp.",
   )
 
-  limit: Optional[int] = Field(
+  next_cursor: Optional[str] = Field(
     None,
-    description="Number of items per page for pagination (default 20).",
+    description="Pagination cursor for next page.",
   )
 
-  offset: Optional[int] = Field(
+  size: Optional[int] = Field(
     None,
-    description="Offset for pagination (default 0).",
+    description="Number of results per page (default 10).",
   )

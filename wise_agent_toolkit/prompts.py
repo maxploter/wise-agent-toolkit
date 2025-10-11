@@ -195,11 +195,12 @@ This tool will list activities for a profile in Wise.
 
 It takes the following arguments:
 - profile_id (int, optional): The profile ID to list activities for. If not provided, will be taken from context.
-- status (str, optional): Filter activities by status.
-- created_date_start (datetime, optional): Filter activities created after this date.
-- created_date_end (datetime, optional): Filter activities created before this date.
-- limit (int, optional): Number of items per page for pagination (default 20).
-- offset (int, optional): Offset for pagination (default 0).
+- monetary_resource_type (str, optional): Filter by resource type.
+- status (str, optional): Filter by activity status.
+- since (datetime, optional): Filter activities created after this timestamp.
+- until (datetime, optional): Filter activities created before this timestamp.
+- next_cursor (str, optional): Pagination cursor for next page.
+- size (int, optional): Number of results per page (default 10).
 
 Returns:
     A list of activities from Wise containing information about each activity.

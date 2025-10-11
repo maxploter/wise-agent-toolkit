@@ -545,11 +545,12 @@ def list_activities(
   api_client,
   context: Context,
   profile_id: Optional[int] = None,
+  monetary_resource_type: Optional[str] = None,
   status: Optional[str] = None,
-  created_date_start: Optional[datetime] = None,
-  created_date_end: Optional[datetime] = None,
-  limit: Optional[int] = None,
-  offset: Optional[int] = None,
+  since: Optional[datetime] = None,
+  until: Optional[datetime] = None,
+  next_cursor: Optional[str] = None,
+  size: Optional[int] = None,
 ):
   """
   List activities for a profile.
@@ -558,14 +559,15 @@ def list_activities(
       api_client: The Wise API client.
       context (Context): The context.
       profile_id (int, optional): The profile ID. If not provided, will be taken from context.
+      monetary_resource_type (str, optional): Filter by resource type.
       status (str, optional): Filter by activity status.
-      created_date_start (datetime, optional): Filter activities created after this date.
-      created_date_end (datetime, optional): Filter activities created before this date.
-      limit (int, optional): Number of items per page (default 20).
-      offset (int, optional): Offset for pagination (default 0).
+      since (datetime, optional): Filter activities created after this timestamp.
+      until (datetime, optional): Filter activities created before this timestamp.
+      next_cursor (str, optional): Pagination cursor for next page.
+      size (int, optional): Number of results per page (default 10).
 
   Returns:
-      List of activities from Wise.
+      ActivitiesResponse: Activities response from Wise.
   """
   activities_api = wise_api_client.ActivitiesApi(api_client)
 
@@ -579,10 +581,10 @@ def list_activities(
   # Make the API call
   return activities_api.list_activities(
     profile_id=profile_id,
+    monetary_resource_type=monetary_resource_type,
     status=status,
-    created_date_start=created_date_start,
-    created_date_end=created_date_end,
-    limit=limit,
-    offset=offset
+    since=since,
+    until=until,
+    next_cursor=next_cursor,
+    size=size
   )
-
