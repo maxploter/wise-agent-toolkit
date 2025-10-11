@@ -15,6 +15,7 @@ try:
   from ..configuration import Configuration, Context, ACTIONS_ALL
   from ..api import WiseAPI
   from .toolkit import WiseAgentToolkit
+  from .tool import _fix_mcp_schema
 except ImportError:
   # If relative imports fail, try absolute imports
   import sys
@@ -23,6 +24,7 @@ except ImportError:
   from wise_agent_toolkit.configuration import Configuration, Context
   from wise_agent_toolkit.api import WiseAPI
   from wise_agent_toolkit.mcp.toolkit import WiseAgentToolkit
+  from wise_agent_toolkit.mcp.tool import _fix_mcp_schema
 
 # Check for MCP availability
 try:
@@ -67,11 +69,16 @@ async def serve(
     """List all available Wise API tools."""
     tools = []
     for tool in tool_name_and_tool.values():
-      # Convert WiseTool to MCP Tool format
+      # Convert WiseTool to MCP Tool format with schema fix
+      input_schema = {}
+      if tool.args_schema:
+        original_schema = tool.args_schema.model_json_schema()
+        input_schema = _fix_mcp_schema(original_schema)
+
       tools.append(Tool(
         name=tool.name,
         description=tool.description,
-        inputSchema=tool.args_schema.model_json_schema() if tool.args_schema else {}
+        inputSchema=input_schema
       ))
 
     return tools
