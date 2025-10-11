@@ -67,7 +67,7 @@ class WiseAPI(BaseModel):
         default=str  # to_dict() does not serialize datetime objects
       )
     elif method == "list_transfers":
-      transfers = list_transfers(self._api_client, self._context, *args, **kwargs).to_dict()
+      transfers = list_transfers(self._api_client, self._context, *args, **kwargs)
       transfers = [] if transfers is None else transfers
       transfers = [t.to_dict() for t in transfers]
       return json.dumps(
