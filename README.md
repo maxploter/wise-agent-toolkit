@@ -6,17 +6,51 @@ The toolkit supports multiple AI libraries through optional dependencies, allowi
 
 Included below are basic instructions, but refer to the Python package documentation for more information.
 
-## Python
+## Supported API Methods
 
-### Installation
+This toolkit provides comprehensive access to Wise APIs through the following operations:
 
-#### Core Installation
+### Quotes
+- Create a quote
+- Update a quote
+- Get quote by ID
+
+### Recipients
+- List recipient accounts
+- Create recipient account
+- Get recipient account by ID
+- Deactivate recipient account
+- Get account requirements for a quote
+
+### Transfers
+- Create a transfer
+- Get transfer by ID
+- List transfers
+- Cancel a transfer
+
+### Profiles
+- List profiles
+- Get profile by ID
+
+### Activities
+- List activities
+
+
+## Supported Integrations
+- ✅ **LangChain** - Full support with `wise-agent-toolkit[langchain]`
+- ✅ **MCP (Model Context Protocol)** - Full support with `wise-agent-toolkit[mcp]`
+- 🚧 **CrewAI** - Coming soon with `wise-agent-toolkit[crewai]`
+- 🚧 **AutoGen** - Coming soon with `wise-agent-toolkit[autogen]`
+
+## Installation
+
+### Core Installation
 For the basic toolkit without any AI library integrations:
 ```bash
 pip install wise-agent-toolkit
 ```
 
-#### Integration-Specific Installation
+### Integration-Specific Installation
 Choose your AI library and install the corresponding extra:
 
 **LangChain Integration:**
@@ -41,16 +75,10 @@ pip install "wise-agent-toolkit[dev]"
 
 > **Note for macOS/zsh users:** The package name must be quoted to prevent shell interpretation of square brackets. Alternatively, you can escape the brackets: `pip install wise-agent-toolkit\[mcp\]`
 
-### Supported Integrations
-- ✅ **LangChain** - Full support with `wise-agent-toolkit[langchain]`
-- ✅ **MCP (Model Context Protocol)** - Full support with `wise-agent-toolkit[mcp]`
-- 🚧 **CrewAI** - Coming soon with `wise-agent-toolkit[crewai]`
-- 🚧 **AutoGen** - Coming soon with `wise-agent-toolkit[autogen]`
-
 ### Requirements
 - Python 3.11+
 
-### Usage
+## Usage
 
 #### LangChain Integration
 The library needs to be configured with your Wise API key, which is available in your Wise account dashboard.
@@ -74,13 +102,13 @@ wise_agent_toolkit = WiseAgentToolkit(
 The toolkit works with LangChain and can be passed as a list of tools. For example:
 
 ```python
-from langchain.agents import initialize_agent
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
+from langchain.agents import create_react_agent, AgentExecutor
 
 llm = ChatOpenAI(model="gpt-4")
 wise_tools = wise_agent_toolkit.get_tools()
 
-agent = initialize_agent(
+agent = create_react_agent(
     tools=wise_tools,
     llm=llm,
     agent="zero-shot-react-description",
@@ -90,6 +118,19 @@ agent = initialize_agent(
 # Example usage of the agent
 response = agent.run("Create a transfer of 100 EUR to John Doe's account.")
 print(response)
+```
+
+In some cases, you will want to provide default values for specific API requests. The context parameter allows you to specify these defaults. For example:
+
+```python
+wise_agent_toolkit = WiseAgentToolkit(
+    api_key="YOUR_WISE_API_KEY",
+    configuration={
+        "context": {
+            "profile_id": 42,
+        }
+    },
+)
 ```
 
 #### MCP (Model Context Protocol) Integration
@@ -162,20 +203,6 @@ print("Available integrations:", get_available_integrations())
 ### Examples
 For detailed examples, refer to the `/examples` directory in the source repository.
 
-### Context
-In some cases, you will want to provide default values for specific API requests. The context parameter allows you to specify these defaults. For example:
-
-```python
-wise_agent_toolkit = WiseAgentToolkit(
-    api_key="YOUR_WISE_API_KEY",
-    configuration={
-        "context": {
-            "profile_id": 42,
-        }
-    },
-)
-```
-
 ### Adding New Integration Support
 The library is designed to be extensible. To add support for a new AI library:
 
@@ -183,29 +210,3 @@ The library is designed to be extensible. To add support for a new AI library:
 2. Implement the integration-specific toolkit and tool classes inheriting from the base classes
 3. Add the optional dependency to `pyproject.toml`
 4. Update the main `__init__.py` to conditionally import your integration
-
-## Supported API Methods
-### Quotes
-- Create a quote
-- Update a quote
-- Get quote by ID
-
-### Recipients
-- List recipient accounts
-- Create recipient account
-- Get recipient account by ID
-- Deactivate recipient account
-- Get account requirements for a quote
-
-### Transfers
-- Create a transfer
-- Get transfer by ID
-- List transfers
-- Cancel a transfer
-
-### Profiles
-- List profiles
-- Get profile by ID
-
-### Activities
-- List activities
