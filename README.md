@@ -195,6 +195,7 @@ The library is designed to be extensible. To add support for a new AI library:
 - Create recipient account
 - Get recipient account by ID
 - Deactivate recipient account
+- Get account requirements for a quote
 
 ### Transfers
 - Create a transfer

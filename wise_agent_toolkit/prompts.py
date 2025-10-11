@@ -173,3 +173,14 @@ It takes the following arguments:
 Returns:
     The recipient account object from Wise containing detailed information about the recipient.
 """
+
+GET_ACCOUNT_REQUIREMENTS_PROMPT = """
+This tool will get account requirements for a quote in Wise.
+
+It takes the following arguments:
+- quote_id (str): The ID of the quote to get account requirements for.
+- address_required (bool, optional): Whether address is required for the recipient.
+
+Returns:
+    The account requirements object from Wise containing information about required fields for creating a recipient account for the specified quote.
+"""
