@@ -309,3 +309,17 @@ class GetRecipientAccountById(BaseModel):
     ...,
     description="The ID of the recipient account to retrieve.",
   )
+
+
+class GetAccountRequirements(BaseModel):
+  """Schema for the ``get_account_requirements`` operation."""
+
+  quote_id: str = Field(
+    ...,
+    description="The ID of the quote to get account requirements for.",
+  )
+
+  address_required: Optional[bool] = Field(
+    None,
+    description="Whether address is required for the recipient.",
+  )

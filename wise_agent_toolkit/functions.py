@@ -512,3 +512,30 @@ def get_recipient_account_by_id(
   recipients_api = wise_api_client.RecipientsApi(api_client)
 
   return recipients_api.get_recipient_account_by_id(account_id=account_id)
+
+
+def get_account_requirements(
+  api_client,
+  context: Context,
+  quote_id: str,
+  address_required: Optional[bool] = None,
+):
+  """
+  Get account requirements for a quote.
+
+  Parameters:
+      api_client: The Wise API client.
+      context (Context): The context.
+      quote_id (str): The ID of the quote to get account requirements for.
+      address_required (bool, optional): Whether address is required for the recipient.
+
+  Returns:
+      The account requirements object from Wise containing information about required fields for creating a recipient account.
+  """
+  recipients_api = wise_api_client.RecipientsApi(api_client)
+
+  return recipients_api.get_account_requirements(
+    quote_id=quote_id,
+    accept_minor_version=1,
+    address_required=address_required
+  )

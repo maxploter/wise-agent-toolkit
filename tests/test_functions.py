@@ -2,8 +2,9 @@ import unittest
 from unittest import mock
 
 from wise_agent_toolkit.functions import create_transfer, create_quote, update_quote, list_recipient_accounts, \
-  create_recipient_account, deactivate_recipient_account, list_transfers, list_profiles, get_profile_by_id, get_quote_by_id, \
-  get_recipient_account_by_id
+  create_recipient_account, deactivate_recipient_account, list_transfers, list_profiles, get_profile_by_id, \
+  get_quote_by_id, \
+  get_recipient_account_by_id, get_account_requirements
 
 
 class TestWiseFunctions(unittest.TestCase):
@@ -562,6 +563,99 @@ class TestWiseFunctions(unittest.TestCase):
 
       mock_recipients_api_class.assert_called_once_with(mock_api_client)
       mock_recipients_api.get_recipient_account_by_id.assert_called_once_with(account_id=account_id)
+
+      self.assertEqual(result, mock_response)
+
+  def test_get_account_requirements(self):
+    mock_api_client = mock.Mock()
+    mock_recipients_api = mock.Mock()
+    mock_response = [
+      {
+        "type": "email",
+        "fields": [
+          {
+            "name": "email",
+            "group": [
+              {
+                "key": "email",
+                "type": "text",
+                "required": True,
+                "displayFormat": None,
+                "example": "john.doe@example.com",
+                "minLength": None,
+                "maxLength": None,
+                "validationRegexp": None,
+                "validationAsync": None,
+                "valuesAllowed": None
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "iban",
+        "fields": [
+          {
+            "name": "iban",
+            "group": [
+              {
+                "key": "iban",
+                "type": "text",
+                "required": True,
+                "displayFormat": None,
+                "example": "DE89370400440532013000",
+                "minLength": None,
+                "maxLength": None,
+                "validationRegexp": None,
+                "validationAsync": None,
+                "valuesAllowed": None
+              }
+            ]
+          }
+        ]
+      }
+    ]
+
+    with mock.patch("wise_api_client.RecipientsApi") as mock_recipients_api_class:
+      mock_recipients_api_class.return_value = mock_recipients_api
+      mock_recipients_api.get_account_requirements.return_value = mock_response
+
+      context = {}
+      quote_id = "quote-123"
+
+      # Test without address_required
+      result = get_account_requirements(
+        api_client=mock_api_client,
+        context=context,
+        quote_id=quote_id
+      )
+
+      mock_recipients_api_class.assert_called_once_with(mock_api_client)
+      mock_recipients_api.get_account_requirements.assert_called_once_with(
+        quote_id=quote_id,
+        accept_minor_version=1,
+        address_required=None
+      )
+
+      self.assertEqual(result, mock_response)
+
+      # Reset mocks for next test
+      mock_recipients_api_class.reset_mock()
+      mock_recipients_api.get_account_requirements.reset_mock()
+
+      # Test with address_required=True
+      result = get_account_requirements(
+        api_client=mock_api_client,
+        context=context,
+        quote_id=quote_id,
+        address_required=True
+      )
+
+      mock_recipients_api.get_account_requirements.assert_called_once_with(
+        quote_id=quote_id,
+        accept_minor_version=1,
+        address_required=True
+      )
 
       self.assertEqual(result, mock_response)
 
