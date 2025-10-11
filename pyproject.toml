@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wise-agent-toolkit"
-version = "0.3.1"
+version = "0.3.2"
 description = "The Wise Agent Toolkit enables the integration of various AI frameworks and libraries with Wise APIs to create and manage transfers programmatically."
 readme = "README.md"
 requires-python = ">=3.11"
