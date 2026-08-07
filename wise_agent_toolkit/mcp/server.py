@@ -15,7 +15,6 @@ try:
   from ..configuration import Configuration, Context, ACTIONS_ALL
   from ..api import WiseAPI
   from .toolkit import WiseAgentToolkit
-  from .tool import _fix_mcp_schema
 except ImportError:
   # If relative imports fail, try absolute imports
   import sys
@@ -24,18 +23,58 @@ except ImportError:
   from wise_agent_toolkit.configuration import Configuration, Context
   from wise_agent_toolkit.api import WiseAPI
   from wise_agent_toolkit.mcp.toolkit import WiseAgentToolkit
-  from wise_agent_toolkit.mcp.tool import _fix_mcp_schema
 
 # Check for MCP availability
 try:
   from mcp.server import Server
   from mcp.server.stdio import stdio_server
-  from mcp.types import TextContent, Tool
+  from mcp.types import TextContent, Tool, ListToolsResult, CallToolResult
 
   _MCP_AVAILABLE = True
 except ImportError:
   _MCP_AVAILABLE = False
   Server = None
+
+
+def build_server(toolkit: WiseAgentToolkit, server_name: str = "wise-agent-toolkit") -> "Server":
+  """Build an mcp.server.Server wired up to the given toolkit's tools.
+
+  Split out from serve() so tests (and any other embedder) can exercise the
+  request handlers directly, without going through stdio.
+  """
+  logger = logging.getLogger(__name__)
+
+  # Create a dictionary mapping tool names to tool instances
+  tool_name_and_tool = {tool.name: tool for tool in toolkit.get_tools()}
+
+  async def on_list_tools(ctx, params) -> ListToolsResult:
+    """List all available Wise API tools."""
+    tools: list[Tool] = [tool.to_mcp_tool() for tool in tool_name_and_tool.values()]
+    return ListToolsResult(tools=tools)
+
+  async def on_call_tool(ctx, params) -> CallToolResult:
+    """Execute a Wise API tool."""
+    name = params.name
+    arguments = params.arguments or {}
+
+    tool = tool_name_and_tool.get(name)
+    if tool is None:
+      return CallToolResult(
+        content=[TextContent(type="text", text=f"Tool '{name}' not found")],
+        is_error=True,
+      )
+
+    try:
+      result = tool.execute(arguments)
+      return CallToolResult(content=[TextContent(type="text", text=result)])
+    except Exception as e:
+      logger.error(f"Error executing tool {name}: {str(e)}")
+      return CallToolResult(
+        content=[TextContent(type="text", text=f"Error executing {name}: {str(e)}")],
+        is_error=True,
+      )
+
+  return Server(server_name, on_list_tools=on_list_tools, on_call_tool=on_call_tool)
 
 
 async def serve(
@@ -59,53 +98,7 @@ async def serve(
     configuration={"actions": ACTIONS_ALL, "context": context}
   )
 
-  # Create a dictionary mapping tool names to tool instances
-  tool_name_and_tool = {tool.name: tool for tool in toolkit.get_tools()}
-
-  server = Server(server_name)
-
-  @server.list_tools()
-  async def list_tools() -> list[Tool]:
-    """List all available Wise API tools."""
-    tools = []
-    for tool in tool_name_and_tool.values():
-      # Convert WiseTool to MCP Tool format with schema fix
-      input_schema = {}
-      if tool.args_schema:
-        original_schema = tool.args_schema.model_json_schema()
-        input_schema = _fix_mcp_schema(original_schema)
-
-      tools.append(Tool(
-        name=tool.name,
-        description=tool.description,
-        inputSchema=input_schema
-      ))
-
-    return tools
-
-  @server.call_tool()
-  async def call_tool(name: str, arguments: dict) -> list[TextContent]:
-    """Execute a Wise API tool."""
-    try:
-      # Look up the tool in our dictionary
-      if name not in tool_name_and_tool:
-        return [TextContent(
-          type="text",
-          text=f"Tool '{name}' not found"
-        )]
-
-      tool = tool_name_and_tool[name]
-      result = tool.execute(arguments)
-      return [TextContent(
-        type="text",
-        text=result
-      )]
-    except Exception as e:
-      logger.error(f"Error executing tool {name}: {str(e)}")
-      return [TextContent(
-        type="text",
-        text=f"Error executing {name}: {str(e)}"
-      )]
+  server = build_server(toolkit, server_name=server_name)
 
   # Run the server
   options = server.create_initialization_options()
