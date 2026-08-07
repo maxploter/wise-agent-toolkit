@@ -132,14 +132,14 @@ class WiseTool(BaseIntegrationTool):
         )
 
     def execute(self, arguments: Dict[str, Any]) -> str:
-        """Execute the tool with MCP-formatted arguments."""
-        try:
-            # Use the WiseAPI.run method to execute the tool
-            result = self.wise_api.run(self.method, **arguments)
-            return result
+        """Execute the tool with MCP-formatted arguments.
 
-        except Exception as e:
-            return f"Error executing {self.method}: {str(e)}"
+        Raises on failure rather than swallowing the exception into a string,
+        so callers (e.g. the MCP server's on_call_tool handler) can report it
+        as an actual error (CallToolResult.is_error) instead of a successful
+        result that merely reads like one.
+        """
+        return self.wise_api.run(self.method, **arguments)
 
     async def call(self, arguments: Dict[str, Any]) -> list[TextContent]:
         """MCP-compatible call method."""

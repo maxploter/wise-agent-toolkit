@@ -62,6 +62,7 @@ pip install "wise-agent-toolkit[langchain]"
 ```bash
 pip install "wise-agent-toolkit[mcp]"
 ```
+> Requires `mcp>=2.0.0`. If you're upgrading from wise-agent-toolkit `<0.4.0`: the `mcp` package made breaking changes to its server API in 2.0, so this toolkit only supports `mcp` 2.x going forward.
 
 **All Integrations (if you want everything):**
 ```bash
@@ -190,6 +191,46 @@ The MCP server supports the following command-line options:
 
 For production use, always use `https://api.transferwise.com` as the host.
 For testing and development, use `https://api.sandbox.transferwise.tech` (default).
+
+**Using with Claude Code:**
+
+Register the server for the current project:
+```bash
+claude mcp add wise -- python -m wise_agent_toolkit.mcp
+```
+
+Or check in a `.mcp.json` at your project root so the whole team gets it:
+```json
+{
+  "mcpServers": {
+    "wise": {
+      "command": "python",
+      "args": ["-m", "wise_agent_toolkit.mcp"],
+      "env": {
+        "WISE_API_KEY": "${WISE_API_KEY}",
+        "WISE_API_HOST": "https://api.transferwise.com"
+      }
+    }
+  }
+}
+```
+`${WISE_API_KEY}` is expanded from your shell environment at launch — don't hardcode the key in the file. Project-scoped `.mcp.json` servers need one-time approval in Claude Code, or list them under `enabledMcpjsonServers` in `.claude/settings.local.json` to skip the prompt:
+```json
+{
+  "enabledMcpjsonServers": ["wise"]
+}
+```
+
+**Gotcha:** if you omit `WISE_API_HOST`, the server defaults to the *sandbox* API (`https://api.sandbox.transferwise.tech`), not your real account — set it explicitly for production data.
+
+Verify the connection:
+```bash
+claude mcp list
+```
+should show `wise: ... - ✔ Connected`. If it instead shows `Failed to connect — Connection closed`, that error only means the server process exited during startup — it doesn't say why. Run the module directly to see the real traceback:
+```bash
+python -m wise_agent_toolkit.mcp --api_key "$WISE_API_KEY" --host "$WISE_API_HOST"
+```
 
 #### Checking Available Integrations
 You can check which integrations are available in your installation:

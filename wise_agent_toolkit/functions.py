@@ -525,8 +525,8 @@ def list_activities(
   profile_id: Optional[int] = None,
   monetary_resource_type: Optional[str] = None,
   status: Optional[str] = None,
-  since: Optional[datetime] = None,
-  until: Optional[datetime] = None,
+  since: Optional[str] = None,
+  until: Optional[str] = None,
   next_cursor: Optional[str] = None,
   size: Optional[int] = None,
 ):
@@ -539,8 +539,8 @@ def list_activities(
       profile_id (int, optional): The profile ID. If not provided, will be taken from context.
       monetary_resource_type (str, optional): Filter by resource type.
       status (str, optional): Filter by activity status.
-      since (datetime, optional): Filter activities created after this timestamp.
-      until (datetime, optional): Filter activities created before this timestamp.
+      since (str, optional): Filter activities created after this timestamp (ISO 8601 format with milliseconds).
+      until (str, optional): Filter activities created before this timestamp (ISO 8601 format with milliseconds).
       next_cursor (str, optional): Pagination cursor for next page.
       size (int, optional): Number of results per page (default 10).
 

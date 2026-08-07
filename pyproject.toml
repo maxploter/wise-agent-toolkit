@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wise-agent-toolkit"
-version = "0.3.4"
+version = "0.4.0"
 description = "The Wise Agent Toolkit enables the integration of various AI frameworks and libraries with Wise APIs to create and manage transfers programmatically."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -23,7 +23,7 @@ classifiers = [
 
 # Core dependencies (always installed)
 dependencies = [
-    "wise-api-client>=0.5.0",
+    "wise-api-client>=0.6.0",
     "pydantic>=2.10",
 ]
 
@@ -36,8 +36,12 @@ langchain = [
 ]
 
 # MCP (Model Context Protocol) integration support
+# mcp>=2.0.0 is required: 2.x replaced the decorator-based Server API
+# (@server.list_tools() / @server.call_tool()) with constructor kwargs
+# (on_list_tools / on_call_tool). Pin to 2.x so a fresh install doesn't
+# resolve to an SDK version this server can't talk to.
 mcp = [
-    "mcp>=1.0.0",
+    "mcp>=2.0.0",
 ]
 
 # Future integration support can be added here
